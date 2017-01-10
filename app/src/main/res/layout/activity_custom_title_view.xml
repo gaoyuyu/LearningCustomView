@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CustomTitleView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,12 +9,17 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.gaoyy.learningcustomview.MainActivity">
+    android:orientation="vertical"
+    tools:context="com.gaoyy.learningcustomview.ui.CustomTitleViewActivity">
 
-    <Button
-        android:id="@+id/ctv"
-        android:layout_width="match_parent"
+
+    <com.gaoyy.learningcustomview.view.CustomTitleView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="customtitleview"/>
+        CustomTitleView:titleText="Hello Jimbo"
+        CustomTitleView:titleTextColor="#f50404"
+        CustomTitleView:titleTextSize="25sp"
+        android:id="@+id/view"/>
 
-</LinearLayout>
+
+</RelativeLayout>
