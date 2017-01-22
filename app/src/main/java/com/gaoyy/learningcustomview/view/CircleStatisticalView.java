@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -180,14 +181,18 @@ public class CircleStatisticalView extends View
         Log.i(TAG, "onDraw");
         super.onDraw(canvas);
 
+
+        canvas.translate((getWidth() + getPaddingLeft() - getPaddingRight()) / 2, (getHeight() + getPaddingTop() - getPaddingBottom()) / 2);
+
+
         //外矩形
         mPaint.setColor(Color.LTGRAY);
-        RectF rect1 = new RectF(0, 0, outRectWidth, outRectHeight);
+        RectF rect1 = new RectF(-(outRectWidth - 200) / 2, -(outRectHeight - 200) / 2, (outRectWidth - 200) / 2, (outRectHeight - 200) / 2);
 //        canvas.drawRect(rect1, mPaint);
 
         //内矩形
         mPaint.setColor(Color.DKGRAY);
-        RectF rect2 = new RectF((outRectWidth) / 4, (outRectHeight) / 4, (outRectWidth) * 3 / 4, (outRectHeight) * 3 / 4);
+        RectF rect2 = new RectF(-(outRectWidth) / 4, -(outRectHeight) / 4, (outRectWidth) / 4, (outRectHeight) / 4);
 //        canvas.drawRect(rect2, mPaint);
 
 
@@ -195,7 +200,7 @@ public class CircleStatisticalView extends View
 //        {
 //            throw new RuntimeException("不是正方形");
 //        }
-        int radius = (outRectWidth) / 2;
+        int radius = (outRectWidth - 200) / 2;
 
         int start = 0;
         int end = 0;
@@ -208,14 +213,8 @@ public class CircleStatisticalView extends View
             mPaint.setColor(colors[i]);
             canvas.drawArc(rect1, start, Math.min(hudu - 1, currentAnimValue), true, mPaint);
 
-
-            /**
-             * 1.首先判断角度是处于第几象限，确定x，y的正负号
-             * 2.最后计算x，y的值
-             */
-
             int textAngle = hudu / 2;
-            int feed = hudu / 2+start;
+            int feed = hudu / 2 + start;
 
             Log.e(TAG, "start-->" + start);
             Log.e(TAG, "end-->" + end);
@@ -224,53 +223,12 @@ public class CircleStatisticalView extends View
             Log.e(TAG, "feed-->" + feed);
 
 
-            mPaint.setColor(Color.BLACK);
-            mPaint.setTextSize(40f);
-            if (feed >= 0 && feed <= 90)
-            {
-                Log.i(TAG, "第四象限"+radius);
-                double x = Math.abs(radius * Math.cos(Math.toRadians(textAngle)));
-                double y = Math.abs(radius * Math.sin(Math.toRadians(textAngle)));
-                canvas.drawText(texts[i], (float) (x + radius), (float) (y + radius), mPaint);
-                Log.w(TAG,texts[i]+"===="+"x:"+(float) (x + radius)+"==="+"y:"+(float) (y + radius));
-
-            }
-            else if (feed > 90 && feed <= 180)
-            {
-                Log.i(TAG, "第3象限");
-
-                double x = Math.abs(radius * Math.cos(Math.toRadians(180-textAngle)));
-                double y = Math.abs(radius * Math.sin(Math.toRadians(180-textAngle)));
-
-                canvas.drawText(texts[i], (float) (radius - x), (float) (y + radius), mPaint);
-                Log.w(TAG,texts[i]+"===="+"x:"+(float) (radius - x)+"==="+"y:"+(float) (y + radius));
-            }
-            else if (feed > 180 && feed <= 270)
-            {
-                Log.i(TAG, "第2象限");
-                double x = Math.abs(radius * Math.cos(Math.toRadians(textAngle - 180)));
-                double y = Math.abs(radius * Math.sin(Math.toRadians(textAngle - 180)));
-                canvas.drawText(texts[i], (float) (radius - x), (float) (radius - y), mPaint);
-                Log.w(TAG,texts[i]+"===="+"x:"+(float) (radius - x)+"==="+"y:"+(float) (radius - y));
-
-            }
-            else
-            {
-                Log.i(TAG, "第1象限");
-                double x = Math.abs(radius * Math.cos(Math.toRadians(360-textAngle)));
-                double y = Math.abs(radius * Math.sin(Math.toRadians(360-textAngle)));
-
-
-                canvas.drawText(texts[i], (float) (x + radius), (float) (radius - y), mPaint);
-
-                Log.w(TAG,texts[i]+"===="+"x:"+(float) (x + radius)+"==="+"y:"+(float) (radius - y));
-            }
-
+            drawText(canvas, feed, texts[i], hudu, radius);
 
         }
         canvas.drawArc(rect1, start, hudu, true, mPaint);
         mPaint.setColor(Color.WHITE);
-        canvas.drawArc(rect2, 0, 360, true, mPaint);
+//        canvas.drawArc(rect2, 0, 360, true, mPaint);
 
     }
 
@@ -289,6 +247,53 @@ public class CircleStatisticalView extends View
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.setDuration(5000);
         valueAnimator.start();
+
+    }
+
+
+    //画文字
+    private void drawText(Canvas mCanvas, float textAngle, String kinds, float needDrawAngle, int mRadius)
+    {
+        Rect rect = new Rect();
+        mPaint.setColor(Color.BLACK);
+        mPaint.setTextSize(35f);
+        mPaint.getTextBounds(kinds, 0, kinds.length(), rect);
+        if (textAngle >= 0 && textAngle <= 90)
+        { //画布坐标系第一象限(数学坐标系第四象限)
+//            if (needDrawAngle < 30) { //如果小于某个度数,就把文字画在饼状图外面
+            mCanvas.drawText(kinds, (float) (mRadius * 1.2 * Math.cos(Math.toRadians(textAngle))),
+                    (float) (mRadius * 1.2 * Math.sin(Math.toRadians(textAngle))) + rect.height() / 2, mPaint);
+//            } else {
+//                mCanvas.drawText(kinds, (float) (mRadius * 0.75 * Math.cos(Math.toRadians(textAngle))), (float) (mRadius * 0.75 * Math.sin(Math.toRadians(textAngle)))+rect.height()/2, mPaint);
+//            }
+        }
+        else if (textAngle > 90 && textAngle <= 180)
+        { //画布坐标系第二象限(数学坐标系第三象限)
+//            if (needDrawAngle < 30) {
+            mCanvas.drawText(kinds, (float) (-mRadius * 1.2 * Math.cos(Math.toRadians(180 - textAngle))),
+                    (float) (mRadius * 1.2 * Math.sin(Math.toRadians(180 - textAngle))) + rect.height() / 2, mPaint);
+//            } else {
+//                mCanvas.drawText(kinds, (float) (-mRadius * 0.75 * Math.cos(Math.toRadians(180 - textAngle))), (float) (mRadius * 0.75 * Math.sin(Math.toRadians(180 - textAngle)))+rect.height()/2, mPaint);
+//            }
+        }
+        else if (textAngle > 180 && textAngle <= 270)
+        { //画布坐标系第三象限(数学坐标系第二象限)
+//            if (needDrawAngle < 30) {
+            mCanvas.drawText(kinds, (float) (-mRadius * 1.2 * Math.cos(Math.toRadians(textAngle - 180))),
+                    (float) (-mRadius * 1.2 * Math.sin(Math.toRadians(textAngle - 180))) + rect.height() / 2, mPaint);
+//            } else {
+//                mCanvas.drawText(kinds, (float) (-mRadius * 0.75 * Math.cos(Math.toRadians(textAngle - 180))), (float) (-mRadius * 0.75 * Math.sin(Math.toRadians(textAngle - 180)))+rect.height()/2, mPaint);
+//            }
+        }
+        else
+        { //画布坐标系第四象限(数学坐标系第一象限)
+//            if (needDrawAngle < 30) {
+            mCanvas.drawText(kinds, (float) (mRadius * 1.2 * Math.cos(Math.toRadians(360 - textAngle))),
+                    (float) (-mRadius * 1.2 * Math.sin(Math.toRadians(360 - textAngle))) + rect.height() / 2, mPaint);
+//            } else {
+//                mCanvas.drawText(kinds, (float) (mRadius * 0.75 * Math.cos(Math.toRadians(360 - textAngle))), (float) (-mRadius * 0.75 * Math.sin(Math.toRadians(360 - textAngle)))+rect.height()/2, mPaint);
+//            }
+        }
 
     }
 }

@@ -12,7 +12,17 @@
     <com.gaoyy.learningcustomview.view.CircleStatisticalView
         android:id="@+id/csv"
         android:layout_width="300dp"
+        android:visibility="visible"
         android:layout_height="300dp"/>
+
+
+    <com.gaoyy.learningcustomview.view.PieChatView
+        android:id="@+id/pie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="80dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
 
 
 
