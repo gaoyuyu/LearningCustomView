@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".ui.CircleStatisticalActivity">
         </activity>
+        <activity android:name=".ui.WaveActivity">
+        </activity>
     </application>
 
 </manifest>

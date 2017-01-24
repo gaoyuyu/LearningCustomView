@@ -8,16 +8,20 @@ import android.widget.Button;
 
 import com.gaoyy.learningcustomview.ui.CircleStatisticalActivity;
 import com.gaoyy.learningcustomview.ui.CustomTitleViewActivity;
+import com.gaoyy.learningcustomview.ui.WaveActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     private Button ctv;
     private Button csv;
+    private Button wave;
 
     private void assignViews() {
         ctv = (Button) findViewById(R.id.ctv);
         csv = (Button) findViewById(R.id.csv);
+        wave = (Button) findViewById(R.id.wave);
     }
+
 
 
     @Override
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         ctv.setOnClickListener(this);
         csv.setOnClickListener(this);
+        wave.setOnClickListener(this);
     }
 
     @Override
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.csv:
                 intent.setClass(MainActivity.this, CircleStatisticalActivity.class);
                 break;
+            case R.id.wave:
+                intent.setClass(MainActivity.this, WaveActivity.class);
         }
         startActivity(intent);
     }
