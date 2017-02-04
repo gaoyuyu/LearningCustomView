@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -20,7 +21,7 @@ import com.gaoyy.learningcustomview.R;
  * Created by gaoyy on 2017/1/24.
  */
 
-public class WaveView extends View
+public class WaveView extends View implements Runnable
 {
     private static final String TAG= WaveView.class.getSimpleName();
     private PaintFlagsDrawFilter mDrawFilter;
@@ -34,6 +35,13 @@ public class WaveView extends View
     private int mControlY;
 
     private int currentControlY;
+
+    private Handler mHandler  = new Handler();
+
+    public void setCurrentControlY(int currentControlY)
+    {
+        this.currentControlY = currentControlY;
+    }
 
     public int getCurrentControlY()
     {
@@ -75,18 +83,31 @@ public class WaveView extends View
     }
 
     @Override
+    public void run()
+    {
+        Log.i(TAG,"run");
+        currentControlY+=10;
+        if(currentControlY >= mScreenWidth)
+        {
+            currentControlY= 0;
+        }
+        setCurrentControlY(currentControlY);
+        postInvalidate();
+    }
+
+    @Override
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+
+        Log.i(TAG,"currentY-->"+getCurrentControlY());
         // 从canvas层面去除锯齿
         canvas.setDrawFilter(mDrawFilter);
-
         canvas.translate((getWidth() + getPaddingLeft() - getPaddingRight()) / 2, (getHeight() + getPaddingTop() - getPaddingBottom()) / 2);
 
         mPaint.setColor(getResources().getColor(R.color.colorPrimary));
 
         mPath.reset();
-
 
         //屏幕外边的一条波纹
         mPath.moveTo(-mScreenWidth*3/2+getCurrentControlY(),0);
@@ -98,18 +119,13 @@ public class WaveView extends View
         mPath.quadTo(-mScreenWidth/4+getCurrentControlY(),100,0+getCurrentControlY(),0);
         mPath.quadTo(mScreenWidth/4+getCurrentControlY(),-100,mScreenWidth/2+getCurrentControlY(),0);
 
-
-
-
         mPath.lineTo(mScreenWidth/2,mScreenHeight/2);
         //在此处封闭Path的时候也同时需要偏移量，否则出现左侧跳动
         mPath.lineTo(-mScreenWidth/2-getCurrentControlY(),mScreenHeight/2);
         mPath.close();
         canvas.drawPath(mPath,mPaint);
 
-
-
-
+        mHandler.postDelayed(this,20);
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -181,7 +197,7 @@ public class WaveView extends View
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
                 currentControlY = (int) valueAnimator.getAnimatedValue();
-                invalidate();
+                postInvalidate();
             }
         });
         valueAnimator.setDuration(1000);
