@@ -3,10 +3,14 @@ package com.gaoyy.learningcustomview.view;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -76,7 +80,6 @@ public class WaveView extends View implements Runnable
         mDrawFilter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, Paint.DITHER_FLAG);
         mPath = new Path();
         mPaint = new Paint();
-        mPaint.setColor(getResources().getColor(R.color.colorPrimary));
         mPaint.setAntiAlias(true);
         mPaint.setStrokeWidth(10f);
         mPaint.setStyle(Paint.Style.FILL);
@@ -99,6 +102,20 @@ public class WaveView extends View implements Runnable
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+        Paint paint = new Paint();
+
+        Bitmap maskbitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
+
+        int maskwidth = maskbitmap.getWidth();
+        int maskheight = maskbitmap.getHeight();
+
+
+        int saveFlags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+        canvas.saveLayer(0, 0, maskwidth, maskheight, null, saveFlags);
+        canvas.drawBitmap(maskbitmap, 0, 0, mPaint);
+
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
 
         Log.i(TAG,"currentY-->"+getCurrentControlY());
         // 从canvas层面去除锯齿
@@ -124,6 +141,9 @@ public class WaveView extends View implements Runnable
         mPath.lineTo(-mScreenWidth/2-getCurrentControlY(),mScreenHeight/2);
         mPath.close();
         canvas.drawPath(mPath,mPaint);
+
+        mPaint.setXfermode(null);
+        canvas.restore();
 
         mHandler.postDelayed(this,20);
     }
