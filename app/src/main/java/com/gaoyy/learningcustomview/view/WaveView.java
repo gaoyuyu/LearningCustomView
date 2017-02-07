@@ -102,6 +102,7 @@ public class WaveView extends View implements Runnable
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+
         Paint paint = new Paint();
 
         Bitmap maskbitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
@@ -114,7 +115,7 @@ public class WaveView extends View implements Runnable
         canvas.saveLayer(0, 0, maskwidth, maskheight, null, saveFlags);
         canvas.drawBitmap(maskbitmap, 0, 0, mPaint);
 
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 
 
         Log.i(TAG,"currentY-->"+getCurrentControlY());
