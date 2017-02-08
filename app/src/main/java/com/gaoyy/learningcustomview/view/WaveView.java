@@ -17,7 +17,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import com.gaoyy.learningcustomview.R;
 
@@ -33,23 +33,30 @@ public class WaveView extends View implements Runnable
     private Path mPath;
     private int mScreenWidth;
     private int mScreenHeight;
-    //贝塞尔曲线控制点X轴坐标
-    private int mControlX;
-    //贝塞尔曲线控制点Y轴坐标
-    private int mControlY;
 
-    private int currentControlY;
+    private int riseY;
+    private int offsetX;
 
     private Handler mHandler  = new Handler();
 
-    public void setCurrentControlY(int currentControlY)
+    public int getOffsetX()
     {
-        this.currentControlY = currentControlY;
+        return offsetX;
     }
 
-    public int getCurrentControlY()
+    public void setOffsetX(int offsetX)
     {
-        return currentControlY;
+        this.offsetX = offsetX;
+    }
+
+    public int getRiseY()
+    {
+        return riseY;
+    }
+
+    public void setRiseY(int riseY)
+    {
+        this.riseY = riseY;
     }
 
     public WaveView(Context context)
@@ -89,12 +96,12 @@ public class WaveView extends View implements Runnable
     public void run()
     {
         Log.i(TAG,"run");
-        currentControlY+=10;
-        if(currentControlY >= mScreenWidth)
+        offsetX+=10;
+        if(offsetX >= mScreenWidth)
         {
-            currentControlY= 0;
+            offsetX= 0;
         }
-        setCurrentControlY(currentControlY);
+        setOffsetX(offsetX);
         postInvalidate();
     }
 
@@ -103,22 +110,23 @@ public class WaveView extends View implements Runnable
     {
         super.onDraw(canvas);
 
-        Paint paint = new Paint();
-
-        Bitmap maskbitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
-
-        int maskwidth = maskbitmap.getWidth();
-        int maskheight = maskbitmap.getHeight();
-
+        //遮罩层bitmap
+        Bitmap maskBitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
+        //bitmap缩放到整个view的大小
+        maskBitmap = Bitmap.createScaledBitmap(maskBitmap,mScreenWidth,mScreenHeight,false);
+        //获取长度和宽度
+        int maskWidth = maskBitmap.getWidth();
+        int maskHeight = maskBitmap.getHeight();
 
         int saveFlags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
-        canvas.saveLayer(0, 0, maskwidth, maskheight, null, saveFlags);
-        canvas.drawBitmap(maskbitmap, 0, 0, mPaint);
+        canvas.saveLayer(0, 0, maskWidth, maskHeight, null, saveFlags);
 
+        canvas.drawBitmap(maskBitmap, 0, 0, mPaint);
+
+        //取交集，和上层
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
 
 
-        Log.i(TAG,"currentY-->"+getCurrentControlY());
         // 从canvas层面去除锯齿
         canvas.setDrawFilter(mDrawFilter);
         canvas.translate((getWidth() + getPaddingLeft() - getPaddingRight()) / 2, (getHeight() + getPaddingTop() - getPaddingBottom()) / 2);
@@ -128,18 +136,18 @@ public class WaveView extends View implements Runnable
         mPath.reset();
 
         //屏幕外边的一条波纹
-        mPath.moveTo(-mScreenWidth*3/2+getCurrentControlY(),0);
-        mPath.quadTo(-mScreenWidth*5/4+getCurrentControlY(),100,-mScreenWidth+getCurrentControlY(),0);
-        mPath.quadTo(-mScreenWidth*3/4+getCurrentControlY(),-100,-mScreenWidth/2+getCurrentControlY(),0);
+        mPath.moveTo(-mScreenWidth*3/2+offsetX,mScreenHeight/2-riseY);
+        mPath.quadTo(-mScreenWidth*5/4+offsetX,mScreenHeight/2-20-riseY,-mScreenWidth+offsetX,mScreenHeight/2-riseY);
+        mPath.quadTo(-mScreenWidth*3/4+offsetX,mScreenHeight/2-(-20)-riseY,-mScreenWidth/2+offsetX,mScreenHeight/2-riseY);
 
 
         //屏幕里面的波纹
-        mPath.quadTo(-mScreenWidth/4+getCurrentControlY(),100,0+getCurrentControlY(),0);
-        mPath.quadTo(mScreenWidth/4+getCurrentControlY(),-100,mScreenWidth/2+getCurrentControlY(),0);
+        mPath.quadTo(-mScreenWidth/4+offsetX,mScreenHeight/2-20-riseY,0+offsetX,mScreenHeight/2-riseY);
+        mPath.quadTo(mScreenWidth/4+offsetX,mScreenHeight/2-(-20)-riseY,mScreenWidth/2+offsetX,mScreenHeight/2-riseY);
 
         mPath.lineTo(mScreenWidth/2,mScreenHeight/2);
         //在此处封闭Path的时候也同时需要偏移量，否则出现左侧跳动
-        mPath.lineTo(-mScreenWidth/2-getCurrentControlY(),mScreenHeight/2);
+        mPath.lineTo(-mScreenWidth/2-offsetX,mScreenHeight/2);
         mPath.close();
         canvas.drawPath(mPath,mPaint);
 
@@ -211,19 +219,19 @@ public class WaveView extends View implements Runnable
 
     public void anim()
     {
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 200);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator)
             {
-                currentControlY = (int) valueAnimator.getAnimatedValue();
+                riseY = (int) valueAnimator.getAnimatedValue();
                 postInvalidate();
             }
         });
-        valueAnimator.setDuration(1000);
-        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.setDuration(5000);
+        valueAnimator.setStartDelay(1000);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
         valueAnimator.start();
 
     }
