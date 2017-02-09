@@ -12,14 +12,21 @@ import com.gaoyy.learningcustomview.view.WaveView;
 public class WaveActivity extends AppCompatActivity
 {
     private LinearLayout activityWave;
-    private WaveView wave;
+    private WaveView wave1;
+    private WaveView wave2;
+    private WaveView wave3;
+    private WaveView wave4;
     private Button btn;
 
     private void assignViews() {
         activityWave = (LinearLayout) findViewById(R.id.activity_wave);
-        wave = (WaveView) findViewById(R.id.wave);
+        wave1 = (WaveView) findViewById(R.id.wave1);
+        wave2 = (WaveView) findViewById(R.id.wave2);
+        wave3 = (WaveView) findViewById(R.id.wave3);
+        wave4 = (WaveView) findViewById(R.id.wave4);
         btn = (Button) findViewById(R.id.btn);
     }
+
 
 
     @Override
@@ -33,7 +40,10 @@ public class WaveActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                wave.anim();
+                wave1.anim();
+                wave2.anim();
+                wave3.anim();
+                wave4.anim();
             }
         });
 

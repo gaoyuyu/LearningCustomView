@@ -63,7 +63,8 @@ public class CustomTitleView extends View
 
     private void initParams(Context context, AttributeSet attrs)
     {
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleView);
+        TypedArray ta = context.obtainStyledAttributes(attrs,
+                R.styleable.CustomTitleView);
         mTitleText = ta.getString(R.styleable.CustomTitleView_titleText);
         mTitleTextSize = ta.getDimension(R.styleable.CustomTitleView_titleTextSize,
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, context.getResources().getDisplayMetrics()));

@@ -1,28 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:WaveView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_wave"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="10dp"
+    android:orientation="vertical"
     tools:context="com.gaoyy.learningcustomview.ui.WaveActivity">
 
     <com.gaoyy.learningcustomview.view.WaveView
-        android:id="@+id/wave"
+        android:id="@+id/wave1"
         android:layout_width="100dp"
-        android:layout_height="100dp"/>
-    
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        WaveView:maskType="Circle"
+        WaveView:waveColor="@color/colorAccent"/>
+
+    <com.gaoyy.learningcustomview.view.WaveView
+        android:id="@+id/wave2"
+        android:layout_margin="5dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        WaveView:maskColor="#e8e8e8"
+        WaveView:maskCustomBackground="@mipmap/ic_launcher"
+        WaveView:maskType="Rect"
+        WaveView:waveColor="@color/colorAccent"/>
+
+    <com.gaoyy.learningcustomview.view.WaveView
+        android:id="@+id/wave3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        WaveView:maskColor="@color/colorPrimaryDark"
+        WaveView:maskCustomBackground="@mipmap/ic_launcher"
+        WaveView:maskType="RoundRect"
+        WaveView:waveColor="@color/colorAccent"/>
+
+    <com.gaoyy.learningcustomview.view.WaveView
+        android:id="@+id/wave4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        WaveView:maskCustomBackground="@mipmap/ic_launcher"
+        WaveView:maskType="Custom"
+        WaveView:waveColor="@color/colorAccent"/>
+
     <!--<com.gaoyy.learningcustomview.view.WaveView2-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:id="@+id/wave2"-->
-        <!--android:layout_height="100dp"/>-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:id="@+id/wave2"-->
+    <!--android:layout_height="100dp"/>-->
 
     <Button
         android:id="@+id/btn"
         android:layout_width="match_parent"
-        android:text="btn"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:text="btn"/>
 
 </LinearLayout>

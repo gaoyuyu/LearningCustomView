@@ -3,13 +3,16 @@ package com.gaoyy.learningcustomview.view;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
@@ -31,11 +34,18 @@ public class WaveView extends View implements Runnable
     private PaintFlagsDrawFilter mDrawFilter;
     private Paint mPaint;
     private Path mPath;
-    private int mScreenWidth;
-    private int mScreenHeight;
+    private int mWidth;
+    private int mHeight;
 
     private int riseY;
     private int offsetX;
+
+    private int mMaskType;
+    private int mMaskColor;
+    private int mMaskCustomBackgroundID;
+    private int mWaveColor;
+
+
 
     private Handler mHandler  = new Handler();
 
@@ -72,6 +82,7 @@ public class WaveView extends View implements Runnable
     public WaveView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        initParams(context, attrs);
         initPaint();
     }
 
@@ -79,8 +90,20 @@ public class WaveView extends View implements Runnable
     public WaveView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)
     {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initParams(context, attrs);
         initPaint();
     }
+
+    private void initParams(Context context, AttributeSet attrs)
+    {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.WaveView);
+        mMaskType = ta.getInt(R.styleable.WaveView_maskType,0);
+        mMaskColor = ta.getColor(R.styleable.WaveView_maskColor,Color.LTGRAY);
+        mWaveColor = ta.getColor(R.styleable.WaveView_waveColor,Color.BLUE);
+        mMaskCustomBackgroundID = ta.getResourceId(R.styleable.WaveView_maskCustomBackground,0);
+        ta.recycle();
+    }
+
 
     private void initPaint()
     {
@@ -95,9 +118,8 @@ public class WaveView extends View implements Runnable
     @Override
     public void run()
     {
-        Log.i(TAG,"run");
         offsetX+=10;
-        if(offsetX >= mScreenWidth)
+        if(offsetX >= mWidth)
         {
             offsetX= 0;
         }
@@ -110,18 +132,51 @@ public class WaveView extends View implements Runnable
     {
         super.onDraw(canvas);
 
+        if(mMaskType == 0)
+        {
+            throw new RuntimeException("请设置类型");
+        }
+
+        if(mMaskType == 4 && mMaskCustomBackgroundID == 0)
+        {
+            throw new RuntimeException("未有设置自定义图片");
+        }
+
+        int saveFlags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+        canvas.saveLayer(0, 0, mWidth, mHeight, null, saveFlags);
+
+        drawMask(canvas);
+
+        //取交集，和上层
+        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+
+        drawWave(canvas);
+
+
+        mPaint.setXfermode(null);
+        canvas.restore();
+
+        mHandler.postDelayed(this,20);
+
+
+
+/*
+
         //遮罩层bitmap
         Bitmap maskBitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
         //bitmap缩放到整个view的大小
-        maskBitmap = Bitmap.createScaledBitmap(maskBitmap,mScreenWidth,mScreenHeight,false);
+        maskBitmap = Bitmap.createScaledBitmap(maskBitmap,mWidth,mHeight,false);
         //获取长度和宽度
         int maskWidth = maskBitmap.getWidth();
         int maskHeight = maskBitmap.getHeight();
 
         int saveFlags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
-        canvas.saveLayer(0, 0, maskWidth, maskHeight, null, saveFlags);
+//        canvas.saveLayer(0, 0, maskWidth, maskHeight, null, saveFlags);
+        canvas.saveLayer(0, 0, mWidth, mHeight, null, saveFlags);
+        mPaint.setColor(Color.GRAY);
+        canvas.drawRoundRect(0,0,mWidth,mHeight,30,30,mPaint);
 
-        canvas.drawBitmap(maskBitmap, 0, 0, mPaint);
+//        canvas.drawBitmap(maskBitmap, 0, 0, mPaint);
 
         //取交集，和上层
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
@@ -136,18 +191,18 @@ public class WaveView extends View implements Runnable
         mPath.reset();
 
         //屏幕外边的一条波纹
-        mPath.moveTo(-mScreenWidth*3/2+offsetX,mScreenHeight/2-riseY);
-        mPath.quadTo(-mScreenWidth*5/4+offsetX,mScreenHeight/2-20-riseY,-mScreenWidth+offsetX,mScreenHeight/2-riseY);
-        mPath.quadTo(-mScreenWidth*3/4+offsetX,mScreenHeight/2-(-20)-riseY,-mScreenWidth/2+offsetX,mScreenHeight/2-riseY);
+        mPath.moveTo(-mWidth*3/2+offsetX,mHeight/2-riseY);
+        mPath.quadTo(-mWidth*5/4+offsetX,mHeight/2-20-riseY,-mWidth+offsetX,mHeight/2-riseY);
+        mPath.quadTo(-mWidth*3/4+offsetX,mHeight/2-(-20)-riseY,-mWidth/2+offsetX,mHeight/2-riseY);
 
 
         //屏幕里面的波纹
-        mPath.quadTo(-mScreenWidth/4+offsetX,mScreenHeight/2-20-riseY,0+offsetX,mScreenHeight/2-riseY);
-        mPath.quadTo(mScreenWidth/4+offsetX,mScreenHeight/2-(-20)-riseY,mScreenWidth/2+offsetX,mScreenHeight/2-riseY);
+        mPath.quadTo(-mWidth/4+offsetX,mHeight/2-20-riseY,0+offsetX,mHeight/2-riseY);
+        mPath.quadTo(mWidth/4+offsetX,mHeight/2-(-20)-riseY,mWidth/2+offsetX,mHeight/2-riseY);
 
-        mPath.lineTo(mScreenWidth/2,mScreenHeight/2);
+        mPath.lineTo(mWidth/2,mHeight/2);
         //在此处封闭Path的时候也同时需要偏移量，否则出现左侧跳动
-        mPath.lineTo(-mScreenWidth/2-offsetX,mScreenHeight/2);
+        mPath.lineTo(-mWidth/2-offsetX,mHeight/2);
         mPath.close();
         canvas.drawPath(mPath,mPaint);
 
@@ -155,7 +210,68 @@ public class WaveView extends View implements Runnable
         canvas.restore();
 
         mHandler.postDelayed(this,20);
+
+        */
     }
+
+    private void drawMask(Canvas canvas)
+    {
+        RectF rectF = new RectF(0,0,mWidth,mHeight);
+        mPaint.setColor(mMaskColor);
+        switch (mMaskType)
+        {
+            case 1:
+                //Circle
+                canvas.drawOval(rectF,mPaint);
+                break;
+            case 2:
+                //Rect
+                canvas.drawRect(rectF,mPaint);
+                break;
+            case 3:
+                //RoundRect
+                canvas.drawRoundRect(rectF,30,30,mPaint);
+                break;
+            case 4:
+                //遮罩层bitmap
+                Bitmap maskBitmap = ((BitmapDrawable)getResources().getDrawable(mMaskCustomBackgroundID)).getBitmap();
+                //bitmap缩放到整个view的大小
+                maskBitmap = Bitmap.createScaledBitmap(maskBitmap,mWidth,mHeight,false);
+                //获取长度和宽度
+                int maskWidth = maskBitmap.getWidth();
+                int maskHeight = maskBitmap.getHeight();
+                canvas.drawBitmap(maskBitmap, 0, 0, mPaint);
+                break;
+        }
+    }
+
+    private void drawWave(Canvas canvas)
+    {
+        // 从canvas层面去除锯齿
+        canvas.setDrawFilter(mDrawFilter);
+        canvas.translate((getWidth() + getPaddingLeft() - getPaddingRight()) / 2, (getHeight() + getPaddingTop() - getPaddingBottom()) / 2);
+
+        mPaint.setColor(mWaveColor);
+
+        mPath.reset();
+
+        //屏幕外边的一条波纹
+        mPath.moveTo(-mWidth*3/2+offsetX,mHeight/2-riseY);
+        mPath.quadTo(-mWidth*5/4+offsetX,mHeight/2-20-riseY,-mWidth+offsetX,mHeight/2-riseY);
+        mPath.quadTo(-mWidth*3/4+offsetX,mHeight/2-(-20)-riseY,-mWidth/2+offsetX,mHeight/2-riseY);
+
+
+        //屏幕里面的波纹
+        mPath.quadTo(-mWidth/4+offsetX,mHeight/2-20-riseY,0+offsetX,mHeight/2-riseY);
+        mPath.quadTo(mWidth/4+offsetX,mHeight/2-(-20)-riseY,mWidth/2+offsetX,mHeight/2-riseY);
+
+        mPath.lineTo(mWidth/2,mHeight/2);
+        //在此处封闭Path的时候也同时需要偏移量，否则出现左侧跳动
+        mPath.lineTo(-mWidth/2-offsetX,mHeight/2);
+        mPath.close();
+        canvas.drawPath(mPath,mPaint);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -181,7 +297,7 @@ public class WaveView extends View implements Runnable
                 Log.i(TAG, "width MeasureSpec.AT_MOST");
                 break;
         }
-        mScreenWidth = (result);
+        mWidth = result;
         return result;
     }
 
@@ -205,21 +321,20 @@ public class WaveView extends View implements Runnable
                 //wrap_content下默认为200dp
                 break;
         }
-        mScreenHeight = (result);
+        mHeight = result;
         return result;
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         super.onSizeChanged(w, h, oldw, oldh);
-        mScreenWidth = w;
-        mScreenHeight = h;
-        Log.e(TAG,"mScreenWidth-->"+mScreenWidth);
+        mWidth = w;
+        mHeight = h;
     }
 
     public void anim()
     {
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 100);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, 200+100);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
