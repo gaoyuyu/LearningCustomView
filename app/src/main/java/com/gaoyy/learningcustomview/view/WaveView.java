@@ -46,7 +46,6 @@ public class WaveView extends View implements Runnable
     private int mWaveColor;
 
 
-
     private Handler mHandler  = new Handler();
 
     public int getOffsetX()
@@ -157,61 +156,6 @@ public class WaveView extends View implements Runnable
         canvas.restore();
 
         mHandler.postDelayed(this,20);
-
-
-
-/*
-
-        //遮罩层bitmap
-        Bitmap maskBitmap = ((BitmapDrawable)getResources().getDrawable(R.mipmap.img)).getBitmap();
-        //bitmap缩放到整个view的大小
-        maskBitmap = Bitmap.createScaledBitmap(maskBitmap,mWidth,mHeight,false);
-        //获取长度和宽度
-        int maskWidth = maskBitmap.getWidth();
-        int maskHeight = maskBitmap.getHeight();
-
-        int saveFlags = Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
-//        canvas.saveLayer(0, 0, maskWidth, maskHeight, null, saveFlags);
-        canvas.saveLayer(0, 0, mWidth, mHeight, null, saveFlags);
-        mPaint.setColor(Color.GRAY);
-        canvas.drawRoundRect(0,0,mWidth,mHeight,30,30,mPaint);
-
-//        canvas.drawBitmap(maskBitmap, 0, 0, mPaint);
-
-        //取交集，和上层
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-
-
-        // 从canvas层面去除锯齿
-        canvas.setDrawFilter(mDrawFilter);
-        canvas.translate((getWidth() + getPaddingLeft() - getPaddingRight()) / 2, (getHeight() + getPaddingTop() - getPaddingBottom()) / 2);
-
-        mPaint.setColor(getResources().getColor(R.color.colorPrimary));
-
-        mPath.reset();
-
-        //屏幕外边的一条波纹
-        mPath.moveTo(-mWidth*3/2+offsetX,mHeight/2-riseY);
-        mPath.quadTo(-mWidth*5/4+offsetX,mHeight/2-20-riseY,-mWidth+offsetX,mHeight/2-riseY);
-        mPath.quadTo(-mWidth*3/4+offsetX,mHeight/2-(-20)-riseY,-mWidth/2+offsetX,mHeight/2-riseY);
-
-
-        //屏幕里面的波纹
-        mPath.quadTo(-mWidth/4+offsetX,mHeight/2-20-riseY,0+offsetX,mHeight/2-riseY);
-        mPath.quadTo(mWidth/4+offsetX,mHeight/2-(-20)-riseY,mWidth/2+offsetX,mHeight/2-riseY);
-
-        mPath.lineTo(mWidth/2,mHeight/2);
-        //在此处封闭Path的时候也同时需要偏移量，否则出现左侧跳动
-        mPath.lineTo(-mWidth/2-offsetX,mHeight/2);
-        mPath.close();
-        canvas.drawPath(mPath,mPaint);
-
-        mPaint.setXfermode(null);
-        canvas.restore();
-
-        mHandler.postDelayed(this,20);
-
-        */
     }
 
     private void drawMask(Canvas canvas)
