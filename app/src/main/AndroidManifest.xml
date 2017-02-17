@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".ui.WaveActivity">
         </activity>
+        <activity android:name=".ui.FlowActivity">
+        </activity>
     </application>
 
 </manifest>

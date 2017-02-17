@@ -29,4 +29,10 @@
         android:layout_height="wrap_content"
         android:text="水波纹"/>
 
+
+    <Button
+        android:id="@+id/viewgroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="自定义viewgroup  FlowLayout"/>
 </LinearLayout>
