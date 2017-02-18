@@ -79,39 +79,37 @@ public class FlowLayout extends ViewGroup
 
             Log.i(TAG, "childWidth--->" + childWidth);
             Log.i(TAG, "childHeight--->" + childHeight);
-            if (lineWidth + childWidth < sizeWidth)
+            if (lineWidth + childWidth < sizeWidth - getPaddingLeft() - getPaddingRight())
             {
                 lineWidth = lineWidth + childWidth;
 
                 //取高度的最大值
-                lineHeight = Math.max(lineHeight,childHeight);
+                lineHeight = Math.max(lineHeight, childHeight);
             }
-            else
+            else if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight())
             {
                 //换行
                 width = Math.max(lineWidth, childWidth);
                 //重置宽度
                 lineWidth = childWidth;
 
-                height= height+lineHeight;
+                height = height + lineHeight;
 
                 lineHeight = childHeight;
-
-
             }
 
             if (i == childCount - 1)
             {
                 width = Math.max(width, lineWidth);
-                height= height+lineHeight;
+                height = height + lineHeight;
             }
 
-            Log.i(TAG,"width-->"+width);
-            Log.i(TAG,"height-->"+height);
+            Log.i(TAG, "width-->" + width);
+            Log.i(TAG, "height-->" + height);
 
 
-            setMeasuredDimension((widthMode == MeasureSpec.EXACTLY)?sizeWidth:width,
-                    (heightMode == MeasureSpec.EXACTLY)?sizeHeight:height);
+            setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? sizeWidth : width + getPaddingLeft() + getPaddingRight(),
+                    (heightMode == MeasureSpec.EXACTLY) ? sizeHeight : height + getPaddingTop() + getPaddingBottom());
 
         }
     }
@@ -135,17 +133,17 @@ public class FlowLayout extends ViewGroup
 
         int childCount = getChildCount();
 
-        for(int i=0;i<childCount;i++)
+        for (int i = 0; i < childCount; i++)
         {
             View childView = getChildAt(i);
 
 
-            MarginLayoutParams childMargin = (MarginLayoutParams)childView.getLayoutParams();
+            MarginLayoutParams childMargin = (MarginLayoutParams) childView.getLayoutParams();
 
-            int childWidth = childView.getMeasuredWidth()+childMargin.leftMargin+childMargin.rightMargin;
-            int childHeight = childView.getMeasuredHeight()+childMargin.topMargin+childMargin.bottomMargin;
+            int childWidth = childView.getMeasuredWidth() + childMargin.leftMargin + childMargin.rightMargin;
+            int childHeight = childView.getMeasuredHeight() + childMargin.topMargin + childMargin.bottomMargin;
 
-            if(lineWidth+childWidth>width)
+            if (lineWidth + childWidth > width - getPaddingLeft() - getPaddingRight())
             {
                 mLineHeight.add(lineHeight);
                 mAllViews.add(lineViews);
@@ -158,8 +156,8 @@ public class FlowLayout extends ViewGroup
             }
 
 
-            lineWidth = lineWidth+childWidth;
-            lineHeight = Math.max(lineHeight,childHeight);
+            lineWidth = lineWidth + childWidth;
+            lineHeight = Math.max(lineHeight, childHeight);
             lineViews.add(childView);
 
 
@@ -170,12 +168,12 @@ public class FlowLayout extends ViewGroup
         mAllViews.add(lineViews);
 
 
-        int left = 0;
-        int top = 0;
+        int left = getPaddingLeft();
+        int top = getPaddingTop();
 
         //总行数
         int lineNums = mAllViews.size();
-        for(int i=0;i<lineNums;i++)
+        for (int i = 0; i < lineNums; i++)
         {
             //每一行的总view
             lineViews = mAllViews.get(i);
@@ -184,7 +182,7 @@ public class FlowLayout extends ViewGroup
             Log.e(TAG, "第" + i + "行 ：" + lineViews.size() + " , " + lineViews);
             Log.e(TAG, "第" + i + "行， ：" + lineHeight);
 
-            for(int j=0;j<lineViews.size();j++)
+            for (int j = 0; j < lineViews.size(); j++)
             {
                 View child = lineViews.get(j);
 
@@ -195,22 +193,19 @@ public class FlowLayout extends ViewGroup
                 MarginLayoutParams childMargin = (MarginLayoutParams) child.getLayoutParams();
 
 
-                int lc = left+ childMargin.leftMargin;
-                int tc = top+childMargin.rightMargin;
-                int rc = lc+child.getMeasuredWidth();
-                int bc = tc+child.getMeasuredHeight();
+                int lc = left + childMargin.leftMargin;
+                int tc = top + childMargin.rightMargin;
+                int rc = lc + child.getMeasuredWidth();
+                int bc = tc + child.getMeasuredHeight();
 
-                child.layout(lc,tc,rc,bc);
+                child.layout(lc, tc, rc, bc);
 
-                left= left + child.getMeasuredWidth()+childMargin.leftMargin+childMargin.rightMargin;
+                left = left + child.getMeasuredWidth() + childMargin.leftMargin + childMargin.rightMargin;
             }
-            left = 0;
-            top = top +lineHeight;
+            left = getPaddingLeft();
+            top = top + lineHeight;
 
         }
-
-
-
 
 
     }
