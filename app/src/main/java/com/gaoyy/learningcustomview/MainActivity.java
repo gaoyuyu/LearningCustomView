@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.gaoyy.learningcustomview.ui.CircleStatisticalActivity;
+import com.gaoyy.learningcustomview.ui.ColorfulBarActivity;
 import com.gaoyy.learningcustomview.ui.CustomTitleViewActivity;
 import com.gaoyy.learningcustomview.ui.FlowActivity;
 import com.gaoyy.learningcustomview.ui.WaveActivity;
@@ -17,13 +18,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button csv;
     private Button wave;
     private Button viewgroup;
+    private Button colorfulbar;
 
     private void assignViews() {
         ctv = (Button) findViewById(R.id.ctv);
         csv = (Button) findViewById(R.id.csv);
         wave = (Button) findViewById(R.id.wave);
         viewgroup = (Button) findViewById(R.id.viewgroup);
+        colorfulbar = (Button) findViewById(R.id.colorfulbar);
     }
+
 
 
 
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         csv.setOnClickListener(this);
         wave.setOnClickListener(this);
         viewgroup.setOnClickListener(this);
+        colorfulbar.setOnClickListener(this);
     }
 
     @Override
@@ -62,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.setClass(MainActivity.this, WaveActivity.class);
             case R.id.viewgroup:
                 intent.setClass(MainActivity.this, FlowActivity.class);
+                break;
+            case R.id.colorfulbar:
+                intent.setClass(MainActivity.this, ColorfulBarActivity.class);
                 break;
         }
         startActivity(intent);

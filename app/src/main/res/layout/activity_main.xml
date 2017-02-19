@@ -35,4 +35,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="自定义viewgroup  FlowLayout"/>
+
+    <Button
+        android:id="@+id/colorfulbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Colorful Bar"/>
 </LinearLayout>
