@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <TextView
+        android:id="@+id/icon_text"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friend"
+        android:background="@color/colorPrimary"
+        android:visibility="visible"
+        android:textColor="@color/flower"
+        android:textSize="16sp"/>

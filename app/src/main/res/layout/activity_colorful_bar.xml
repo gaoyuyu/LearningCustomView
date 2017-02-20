@@ -1,16 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_colorful_bar"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:context="com.gaoyy.learningcustomview.ui.ColorfulBarActivity">
 
 
-    <com.gaoyy.learningcustomview.view.AnimItem
-        android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_height="match_parent"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/icon_img"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/ic_flower"/>-->
 
-</RelativeLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/icon_text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Friendadasdasdadsasdasdas"-->
+        <!--android:visibility="visible"-->
+        <!--android:textColor="@color/flower"-->
+        <!--android:textSize="16sp"/>-->
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/reset"-->
+        <!--android:text="reset"-->
+        <!--android:layout_height="wrap_content"/>-->
+    
+    <com.gaoyy.learningcustomview.view.AnimItem
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></com.gaoyy.learningcustomview.view.AnimItem>
+    
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:text="start"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/reverse"
+        android:layout_width="wrap_content"
+        android:text="reverse"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
