@@ -2,11 +2,8 @@ package com.gaoyy.learningcustomview.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
 import com.gaoyy.learningcustomview.R;
-import com.gaoyy.learningcustomview.view.AnimItem;
 
 public class ColorfulBarActivity extends AppCompatActivity
 {
@@ -29,26 +26,26 @@ public class ColorfulBarActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_colorful_bar);
-        final AnimItem animItem = (AnimItem) findViewById(R.id.item);
-        Button start = (Button)findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                animItem.startAnim();
-            }
-        });
-        Button reverse = (Button)findViewById(R.id.reverse);
-        reverse.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                animItem.reverseAnim();
-            }
-        });
+        setContentView(R.layout.activity_colorful_bar01);
+//        final AnimItem animItem = (AnimItem) findViewById(R.id.item);
+//        Button start = (Button)findViewById(R.id.start);
+//        start.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                animItem.startAnim();
+//            }
+//        });
+//        Button reverse = (Button)findViewById(R.id.reverse);
+//        reverse.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                animItem.reverseAnim();
+//            }
+//        });
 
 
 
