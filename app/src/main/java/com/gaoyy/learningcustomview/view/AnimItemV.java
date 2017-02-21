@@ -1,5 +1,7 @@
 package com.gaoyy.learningcustomview.view;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
@@ -17,6 +19,9 @@ import android.widget.TextView;
 
 public class AnimItemV extends ViewGroup
 {
+    private ImageView icon;
+    private TextView text;
+
     private static final String TAG = AnimItemV.class.getSimpleName();
 
     public AnimItemV(Context context)
@@ -102,7 +107,7 @@ public class AnimItemV extends ViewGroup
         Log.i(TAG, "onLayout height--->" + height);
 
 
-        ImageView icon = (ImageView) getChildAt(0);
+        icon = (ImageView) getChildAt(0);
         MarginLayoutParams iconMargin = (MarginLayoutParams) icon.getLayoutParams();
         int iconWidth = icon.getMeasuredWidth() + iconMargin.leftMargin + iconMargin.rightMargin;
         int iconHeight = icon.getMeasuredHeight() + iconMargin.topMargin + iconMargin.bottomMargin;
@@ -110,8 +115,9 @@ public class AnimItemV extends ViewGroup
 
 
 
-        TextView text = (TextView) getChildAt(1);
+        text = (TextView) getChildAt(1);
         text.setTextColor(Color.BLACK);
+        text.setAlpha(0.0f);
         MarginLayoutParams textMargin = (MarginLayoutParams) text.getLayoutParams();
         int textWidth = text.getMeasuredWidth() + textMargin.leftMargin + textMargin.rightMargin;
         int textHeight = text.getMeasuredHeight() + textMargin.topMargin + textMargin.bottomMargin;
@@ -161,11 +167,67 @@ public class AnimItemV extends ViewGroup
 //            text.layout(lc1,tc1-tc,rc1,bc1-tc);
             text.layout(lc1,tc1,rc1,bc1);
 
+        startAnim();
+        reverseAnim();
+
 
 //        }
     }
 
-    
+
+    public void startAnim()
+    {
+        MarginLayoutParams iconMargin = (MarginLayoutParams) icon.getLayoutParams();
+        int iconWidth = icon.getMeasuredWidth() + iconMargin.leftMargin + iconMargin.rightMargin;
+        int tc = (getWidth()- iconWidth)/2;
+
+        Log.e(TAG,"startAnim tc-->"+tc);
+        //icon Y轴向上移动tc
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",-tc).setDuration(1000);
+
+        //text透明度从0变到1
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),1.0f).setDuration(1000);
+        //text Y轴向上移动tc
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",-tc).setDuration(1000);
+
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
+        animatorSet.start();
+
+
+    }
+
+    public void reverseAnim()
+    {
+        MarginLayoutParams iconMargin = (MarginLayoutParams) icon.getLayoutParams();
+        int iconWidth = icon.getMeasuredWidth() + iconMargin.leftMargin + iconMargin.rightMargin;
+        int tc = (getWidth()- iconWidth)/2;
+
+        Log.e(TAG,"reverseAnim tc-->"+tc);
+
+
+        /**
+         *注意这里是0，因为是-tc+tc，所以是0
+         */
+        //icon Y轴向下移动0
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",0).setDuration(1000);
+
+        //text透明度从1变到0
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),0.0f).setDuration(1000);
+        //text Y轴向下移动0
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",0).setDuration(1000);
+
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
+        animatorSet.setStartDelay(2500);
+        animatorSet.start();
+
+//        invalidate();
+    }
+
+
 
     /**
      * 使用系统的MarginLayoutParams
