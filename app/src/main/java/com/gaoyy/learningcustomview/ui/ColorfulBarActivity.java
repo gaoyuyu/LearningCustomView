@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gaoyy.learningcustomview.R;
+import com.gaoyy.learningcustomview.view.AnimItemV;
 
 public class ColorfulBarActivity extends AppCompatActivity
 {
@@ -27,14 +28,16 @@ public class ColorfulBarActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colorful_bar01);
-//        final AnimItem animItem = (AnimItem) findViewById(R.id.item);
+        final AnimItemV animItem = (AnimItemV) findViewById(R.id.item);
 //        Button start = (Button)findViewById(R.id.start);
 //        start.setOnClickListener(new View.OnClickListener()
 //        {
 //            @Override
 //            public void onClick(View view)
 //            {
+//
 //                animItem.startAnim();
+//                Log.i("Test","start-->"+(int)animItem.getTag());
 //            }
 //        });
 //        Button reverse = (Button)findViewById(R.id.reverse);
@@ -44,6 +47,7 @@ public class ColorfulBarActivity extends AppCompatActivity
 //            public void onClick(View view)
 //            {
 //                animItem.reverseAnim();
+//                Log.i("Test","reverse-->"+(int)animItem.getTag());
 //            }
 //        });
 

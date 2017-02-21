@@ -17,10 +17,16 @@ import android.widget.TextView;
  * Created by gaoyy on 2017/2/21.
  */
 
-public class AnimItemV extends ViewGroup
+public class AnimItemV extends ViewGroup implements View.OnClickListener
 {
+
+
+
     private ImageView icon;
     private TextView text;
+
+    //1-icon,2-icon+text
+    private int status=1;
 
     private static final String TAG = AnimItemV.class.getSimpleName();
 
@@ -37,19 +43,23 @@ public class AnimItemV extends ViewGroup
     public AnimItemV(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        setOnClickListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public AnimItemV(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)
     {
         super(context, attrs, defStyleAttr, defStyleRes);
+        setOnClickListener(this);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
+        setTag(1);
         int childCount = getChildCount();
         Log.i(TAG, "childCount-->" + childCount);
+        Log.e(TAG, "setTag(1);-->" + (int)getTag());
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
@@ -167,8 +177,6 @@ public class AnimItemV extends ViewGroup
 //            text.layout(lc1,tc1-tc,rc1,bc1-tc);
             text.layout(lc1,tc1,rc1,bc1);
 
-        startAnim();
-        reverseAnim();
 
 
 //        }
@@ -183,17 +191,19 @@ public class AnimItemV extends ViewGroup
 
         Log.e(TAG,"startAnim tc-->"+tc);
         //icon Y轴向上移动tc
-        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",-tc).setDuration(1000);
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",-tc).setDuration(500);
 
         //text透明度从0变到1
-        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),1.0f).setDuration(1000);
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),1.0f).setDuration(500);
         //text Y轴向上移动tc
-        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",-tc).setDuration(1000);
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",-tc).setDuration(500);
 
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
         animatorSet.start();
+
+        setTag(2);
 
 
     }
@@ -211,20 +221,20 @@ public class AnimItemV extends ViewGroup
          *注意这里是0，因为是-tc+tc，所以是0
          */
         //icon Y轴向下移动0
-        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",0).setDuration(1000);
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",0).setDuration(500);
 
         //text透明度从1变到0
-        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),0.0f).setDuration(1000);
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),0.0f).setDuration(500);
         //text Y轴向下移动0
-        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",0).setDuration(1000);
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",0).setDuration(500);
 
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
-        animatorSet.setStartDelay(2500);
         animatorSet.start();
 
-//        invalidate();
+        setTag(1);
+
     }
 
 
@@ -239,5 +249,18 @@ public class AnimItemV extends ViewGroup
     public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs)
     {
         return new MarginLayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    public void onClick(View view)
+    {
+        if((int)getTag() == 1)
+        {
+            startAnim();
+        }
+        else if((int)getTag() == 2)
+        {
+            reverseAnim();
+        }
     }
 }
