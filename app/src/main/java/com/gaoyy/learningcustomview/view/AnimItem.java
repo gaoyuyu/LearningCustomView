@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.gaoyy.learningcustomview.R;
 
+
 /**
  * Created by gaoyy on 2017/2/21.
  */
@@ -25,6 +27,10 @@ public class AnimItem extends LinearLayout
     private ImageView icon;
     private TextView text;
     private AnimatorSet animatorSet = new AnimatorSet();
+
+    private int mIconID;
+    private String mBottomText;
+
 
 
     public AnimItem(Context context)
@@ -41,6 +47,7 @@ public class AnimItem extends LinearLayout
     {
         super(context, attrs, defStyleAttr);
         init();
+        initParams(context,attrs);
         initChildViews(context);
     }
 
@@ -50,7 +57,16 @@ public class AnimItem extends LinearLayout
     {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+        initParams(context,attrs);
         initChildViews(context);
+    }
+
+    private void initParams(Context context, AttributeSet attrs)
+    {
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AnimItem);
+        mIconID = ta.getResourceId(R.styleable.AnimItem_icon,0);
+        mBottomText = ta.getString(R.styleable.AnimItem_bottomText);
+        ta.recycle();
     }
 
     private void initChildViews(Context context)
@@ -58,7 +74,7 @@ public class AnimItem extends LinearLayout
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
         icon  =  new ImageView(context);
-        icon.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher));
+        icon.setImageDrawable(getResources().getDrawable(mIconID));
         icon.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
@@ -66,7 +82,7 @@ public class AnimItem extends LinearLayout
         text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
         text.setTextSize(16);
-        text.setText("Darkness");
+        text.setText(mBottomText);
         text.setTextColor(getResources().getColor(R.color.colorAccent));
 
         addView(icon,0);

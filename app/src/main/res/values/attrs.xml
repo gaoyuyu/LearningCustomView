@@ -25,4 +25,9 @@
 
     </declare-styleable>
 
+    <declare-styleable name="AnimItem">
+        <attr name="icon" format="reference"></attr>
+        <attr name="bottomText" format="string"></attr>
+    </declare-styleable>
+
 </resources>
