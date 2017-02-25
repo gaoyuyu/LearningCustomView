@@ -4,26 +4,48 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
  * Created by gaoyy on 2017/2/21.
  */
 
-public class AnimItemV extends ViewGroup implements View.OnClickListener
+public class AnimItemV extends ViewGroup implements View.OnClickListener,View.OnTouchListener
 {
-
-
 
     private ImageView icon;
     private TextView text;
+
+    private int x;
+    private int y;
+
+    public int getIX()
+    {
+        return x;
+    }
+
+    public void setIX(int x)
+    {
+        this.x = x;
+    }
+
+    public int getIY()
+    {
+        return y;
+    }
+
+    public void setIY(int y)
+    {
+        this.y = y;
+    }
 
     //1-icon,2-icon+text
     private int status=1;
@@ -44,6 +66,7 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
     {
         super(context, attrs, defStyleAttr);
         setOnClickListener(this);
+//        setOnTouchListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -51,6 +74,7 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
     {
         super(context, attrs, defStyleAttr, defStyleRes);
         setOnClickListener(this);
+//        setOnTouchListener(this);
     }
 
     @Override
@@ -58,9 +82,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
     {
         setTag(1);
         int childCount = getChildCount();
-        Log.i(TAG, "childCount-->" + childCount);
-        Log.e(TAG, "setTag(1);-->" + (int)getTag());
-
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -87,8 +108,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
             //子view的高
             int childHeight = childView.getMeasuredHeight() + childMargin.topMargin + childMargin.bottomMargin;
 
-            Log.i(TAG, "childWidth--->" + childWidth);
-            Log.i(TAG, "childHeight--->" + childHeight);
 
             width = Math.max(width, childWidth);
             height += childHeight;
@@ -99,8 +118,11 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
 
         width = Math.max(width, height);
         height = Math.max(width, height);
-        Log.i(TAG, "onMeasure width--->" + width);
-        Log.i(TAG, "onMeasure height--->" + height);
+
+
+        //sizeWidth = width, sizeHeight = height是为了应对weight的情况
+        sizeWidth = width;
+        sizeHeight = height;
 
         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? sizeWidth : width + getPaddingLeft() + getPaddingRight(),
                 (heightMode == MeasureSpec.EXACTLY) ? sizeHeight : height + getPaddingTop() + getPaddingBottom());
@@ -113,8 +135,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
     {
         int width = getWidth();
         int height = getHeight();
-        Log.i(TAG, "onLayout width--->" + width);
-        Log.i(TAG, "onLayout height--->" + height);
 
 
         icon = (ImageView) getChildAt(0);
@@ -126,19 +146,11 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
 
 
         text = (TextView) getChildAt(1);
-        text.setTextColor(Color.BLACK);
         text.setAlpha(0.0f);
         MarginLayoutParams textMargin = (MarginLayoutParams) text.getLayoutParams();
         int textWidth = text.getMeasuredWidth() + textMargin.leftMargin + textMargin.rightMargin;
         int textHeight = text.getMeasuredHeight() + textMargin.topMargin + textMargin.bottomMargin;
 
-
-        Log.i(TAG, "width--->" + width);
-        Log.i(TAG, "height--->" + height);
-        Log.i(TAG, "iconWidth--->" + iconWidth);
-        Log.i(TAG, "iconHeight--->" + iconHeight);
-        Log.i(TAG, "textWidth--->" + textWidth);
-        Log.i(TAG, "textHeight--->" + textHeight);
 
 
 
@@ -154,10 +166,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
             int rc = lc+iconWidth;
             int bc = tc+iconHeight;
 
-            Log.i(TAG,"lc-->"+lc);
-            Log.i(TAG,"tc-->"+tc);
-            Log.i(TAG,"rc-->"+rc);
-            Log.i(TAG,"bc-->"+bc);
             icon.layout(lc, tc, rc, bc);
 
 
@@ -165,10 +173,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
             int tc1 = bc;
             int rc1 = lc1+textWidth;
             int bc1 = tc1+textHeight;
-            Log.i(TAG,"lc1-->"+lc1);
-            Log.i(TAG,"tc1-->"+tc1);
-            Log.i(TAG,"rc1-->"+rc1);
-            Log.i(TAG,"bc1-->"+bc1);
 
 
         /**
@@ -263,4 +267,34 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener
             reverseAnim();
         }
     }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent)
+    {
+
+        LinearLayout p = (LinearLayout)getParent();
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            int radius = Math.max(p.getWidth(), p.getHeight());
+            x = (int)motionEvent.getRawX();
+            y = (int)motionEvent.getRawY();
+
+            setIX(x);
+            setIY(y);
+
+//                    activityColorfulBar.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+//                    {
+//                        Animator anim = ViewAnimationUtils.createCircularReveal(activityColorfulBar,(int)motionEvent.getRawX(),(int)motionEvent.getRawY(),0,radius);
+//                        anim.setDuration(500);
+//                        anim.setInterpolator(new AccelerateInterpolator());
+//                        anim.setStartDelay(500);
+//                        anim.start();
+//                    }
+
+        }
+        return false;
+    }
+
 }

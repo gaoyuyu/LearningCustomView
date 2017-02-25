@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.gaoyy.learningcustomview.view.AnimLinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:AnimItem="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_colorful_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#888888"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context="com.gaoyy.learningcustomview.ui.ColorfulBarActivity"
+ >
+
+
+    <com.gaoyy.learningcustomview.view.AnimItemV
+        android:id="@+id/item1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_moment"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moment"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+
+    </com.gaoyy.learningcustomview.view.AnimItemV>
+
+    <com.gaoyy.learningcustomview.view.AnimItemV
+        android:id="@+id/item2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_friend"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friend"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+
+    </com.gaoyy.learningcustomview.view.AnimItemV>
+
+    <com.gaoyy.learningcustomview.view.AnimItemV
+        android:id="@+id/item3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_setting"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Setting"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+
+    </com.gaoyy.learningcustomview.view.AnimItemV>
+
+    <com.gaoyy.learningcustomview.view.AnimItemV
+        android:id="@+id/item4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_location"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+
+    </com.gaoyy.learningcustomview.view.AnimItemV>
+
+    <com.gaoyy.learningcustomview.view.AnimItemV
+        android:id="@+id/item5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_love"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Love"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+
+    </com.gaoyy.learningcustomview.view.AnimItemV>
+
+
+</com.gaoyy.learningcustomview.view.AnimLinearLayout>
