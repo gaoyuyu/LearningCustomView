@@ -6,14 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.gaoyy.learningcustomview.R;
 import com.gaoyy.learningcustomview.view.AnimItemV;
 import com.gaoyy.learningcustomview.view.AnimLinearLayout;
 
-public class ColorfulBarActivity extends AppCompatActivity implements View.OnClickListener
+public class ColorfulBarActivity extends AppCompatActivity
 {
     private static final String TAG = ColorfulBarActivity.class.getSimpleName();
     private int[] colors = {android.R.color.holo_blue_dark, android.R.color.holo_red_light,
@@ -47,6 +46,24 @@ public class ColorfulBarActivity extends AppCompatActivity implements View.OnCli
 
         Log.i(TAG, "childCount-->" + childCount);
 
+
+//        activityColorfulBar.setOnTouchListener(new View.OnTouchListener()
+//        {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event)
+//            {
+//                if (event.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    Log.e(TAG,"raw x-->"+event.getRawX());
+//                    Log.e(TAG,"raw y-->"+event.getRawY());
+//                    Log.e(TAG,"x-->"+event.getX());
+//                    Log.e(TAG,"y-->"+event.getY());
+//                }
+//                return false;
+//            }
+//        });
+
+
         for (int i = 0; i < childCount; i++)
         {
             final AnimItemV animItemV = (AnimItemV) activityColorfulBar.getChildAt(i);
@@ -71,24 +88,45 @@ public class ColorfulBarActivity extends AppCompatActivity implements View.OnCli
                             ((AnimItemV)activityColorfulBar.getChildAt(i)).reverseAnim();
                         }
                         int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-                        int x = (int) motionEvent.getRawX();
-                        /**
-                         * 假如外层有再加一层layout，Y坐标需要减去父layout的高度
-                         */
-                        if(activityColorfulBar.getParent() != null)
-                        {
-                            ViewGroup parent = (ViewGroup) activityColorfulBar.getParent();
-                            int y = (int) motionEvent.getRawY()-parent.getHeight();
-                            activityColorfulBar.setChildY(y);
-                        }
-                        else
-                        {
-                            int y = (int) motionEvent.getRawY();
-                            activityColorfulBar.setChildY(y);
+                        Log.e(TAG,"raw x-->"+motionEvent.getRawX());
+                        Log.e(TAG,"raw y-->"+motionEvent.getRawY());
+                        Log.e(TAG,"x-->"+motionEvent.getX());
+                        Log.e(TAG,"y-->"+motionEvent.getY());
 
-                        }
 
-                        activityColorfulBar.setChildX(x);
+                        Log.e(TAG,"w-->"+animItemV.getWidth());
+                        Log.e(TAG,"h-->"+animItemV.getHeight());
+
+
+
+                        float a = (float)finalI+0.5f;
+
+
+                        Log.e(TAG,"a-->"+a);
+
+                        Log.e(TAG,"h1-->"+animItemV.getHeight()/2);
+
+//                        int x = (int) motionEvent.getRawX();
+//                        /**
+//                         * 假如外层有再加一层layout，Y坐标需要减去父layout的高度
+//                         */
+//                        if(activityColorfulBar.getParent() != null)
+//                        {
+//                            ViewGroup parent = (ViewGroup) activityColorfulBar.getParent();
+//                            int y = (int)Math.abs(motionEvent.getRawY()-parent.getHeight());
+//                            activityColorfulBar.setChildY(y);
+//                        }
+//                        else
+//                        {
+//                            int y = (int) motionEvent.getRawY();
+//                            activityColorfulBar.setChildY(y);
+//
+//                        }
+//
+//                        activityColorfulBar.setChildX(x);
+
+                        activityColorfulBar.setChildX((int)(a*animItemV.getWidth()));
+                        activityColorfulBar.setChildY(animItemV.getHeight()/2);
 
                         activityColorfulBar.setColor(getResources().getColor(colors[finalI]));
 
@@ -120,200 +158,8 @@ public class ColorfulBarActivity extends AppCompatActivity implements View.OnCli
         }
 
 
-//        item1.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-//                    int x = (int) motionEvent.getRawX();
-//                    int y = (int) motionEvent.getRawY();
-//                    activityColorfulBar.setChildX(x);
-//                    activityColorfulBar.setChildY(y);
-//                    activityColorfulBar.setColor(getResources().getColor(android.R.color.holo_blue_bright));
-//
-//
-//                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-//                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//                    {
-//                        @Override
-//                        public void onAnimationUpdate(ValueAnimator valueAnimator)
-//                        {
-//                            float currentRadius = (float) valueAnimator.getAnimatedValue();
-//
-//                            activityColorfulBar.setRadius(currentRadius);
-//
-//                            activityColorfulBar.invalidate();
-//
-//                        }
-//                    });
-//                    valueAnimator.setDuration(500);
-//                    valueAnimator.setInterpolator(new DecelerateInterpolator());
-//                    valueAnimator.start();
-//
-//                }
-//                return false;
-//            }
-//        });
-//        item2.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-//                    int x = (int) motionEvent.getRawX();
-//                    int y = (int) motionEvent.getRawY();
-//                    activityColorfulBar.setChildX(x);
-//                    activityColorfulBar.setChildY(y);
-//                    activityColorfulBar.setColor(getResources().getColor(android.R.color.holo_orange_light));
-//
-//
-//                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-//                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//                    {
-//                        @Override
-//                        public void onAnimationUpdate(ValueAnimator valueAnimator)
-//                        {
-//                            float currentRadius = (float) valueAnimator.getAnimatedValue();
-//
-//                            activityColorfulBar.setRadius(currentRadius);
-//
-//                            activityColorfulBar.invalidate();
-//
-//                        }
-//                    });
-//                    valueAnimator.setDuration(500);
-//                    valueAnimator.setInterpolator(new DecelerateInterpolator());
-//                    valueAnimator.start();
-//
-//                }
-//                return false;
-//            }
-//        });
-//        item3.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-//                    int x = (int) motionEvent.getRawX();
-//                    int y = (int) motionEvent.getRawY();
-//                    activityColorfulBar.setChildX(x);
-//                    activityColorfulBar.setChildY(y);
-//                    activityColorfulBar.setColor(getResources().getColor(android.R.color.holo_green_light));
-//
-//
-//                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-//                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//                    {
-//                        @Override
-//                        public void onAnimationUpdate(ValueAnimator valueAnimator)
-//                        {
-//                            float currentRadius = (float) valueAnimator.getAnimatedValue();
-//
-//                            activityColorfulBar.setRadius(currentRadius);
-//
-//                            activityColorfulBar.invalidate();
-//
-//                        }
-//                    });
-//                    valueAnimator.setDuration(500);
-//                    valueAnimator.setInterpolator(new DecelerateInterpolator());
-//                    valueAnimator.start();
-//
-//                }
-//                return false;
-//            }
-//        });
-//        item4.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-//                    int x = (int) motionEvent.getRawX();
-//                    int y = (int) motionEvent.getRawY();
-//                    activityColorfulBar.setChildX(x);
-//                    activityColorfulBar.setChildY(y);
-//                    activityColorfulBar.setColor(getResources().getColor(android.R.color.holo_purple));
-//
-//
-//                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-//                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//                    {
-//                        @Override
-//                        public void onAnimationUpdate(ValueAnimator valueAnimator)
-//                        {
-//                            float currentRadius = (float) valueAnimator.getAnimatedValue();
-//
-//                            activityColorfulBar.setRadius(currentRadius);
-//
-//                            activityColorfulBar.invalidate();
-//
-//                        }
-//                    });
-//                    valueAnimator.setDuration(500);
-//                    valueAnimator.setInterpolator(new DecelerateInterpolator());
-//                    valueAnimator.start();
-//
-//                }
-//                return false;
-//            }
-//        });
-//        item5.setOnTouchListener(new View.OnTouchListener()
-//        {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent)
-//            {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    int radius = Math.max(activityColorfulBar.getWidth(), activityColorfulBar.getHeight());
-//                    int x = (int) motionEvent.getRawX();
-//                    int y = (int) motionEvent.getRawY();
-//                    activityColorfulBar.setChildX(x);
-//                    activityColorfulBar.setChildY(y);
-//                    activityColorfulBar.setColor(getResources().getColor(android.R.color.holo_orange_light));
-//
-//
-//                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-//                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-//                    {
-//                        @Override
-//                        public void onAnimationUpdate(ValueAnimator valueAnimator)
-//                        {
-//                            float currentRadius = (float) valueAnimator.getAnimatedValue();
-//
-//                            activityColorfulBar.setRadius(currentRadius);
-//
-//                            activityColorfulBar.invalidate();
-//
-//                        }
-//                    });
-//                    valueAnimator.setDuration(500);
-//                    valueAnimator.setInterpolator(new DecelerateInterpolator());
-//                    valueAnimator.start();
-//
-//                }
-//                return false;
-//            }
-//        });
-
-
     }
 
-    @Override
-    public void onClick(View view)
-    {
-
-    }
 }
 
 
