@@ -18,7 +18,8 @@
         android:gravity="center"
         android:orientation="horizontal"
         tools:context="com.gaoyy.learningcustomview.ui.ColorfulBarActivity"
-        >
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
 
 
         <com.gaoyy.learningcustomview.view.AnimItemV

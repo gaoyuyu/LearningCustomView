@@ -11,14 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
  * Created by gaoyy on 2017/2/21.
  */
 
-public class AnimItemV extends ViewGroup implements View.OnClickListener,View.OnTouchListener
+public class AnimItemV extends ViewGroup implements View.OnClickListener
 {
 
     private ImageView icon;
@@ -27,28 +26,8 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
     private int x;
     private int y;
 
-    public int getIX()
-    {
-        return x;
-    }
-
-    public void setIX(int x)
-    {
-        this.x = x;
-    }
-
-    public int getIY()
-    {
-        return y;
-    }
-
-    public void setIY(int y)
-    {
-        this.y = y;
-    }
-
     //1-icon,2-icon+text
-    private int status=1;
+    private int status = 1;
 
     private static final String TAG = AnimItemV.class.getSimpleName();
 
@@ -66,7 +45,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
     {
         super(context, attrs, defStyleAttr);
         setOnClickListener(this);
-//        setOnTouchListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -74,7 +52,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
     {
         super(context, attrs, defStyleAttr, defStyleRes);
         setOnClickListener(this);
-//        setOnTouchListener(this);
     }
 
     @Override
@@ -143,8 +120,6 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
         int iconHeight = icon.getMeasuredHeight() + iconMargin.topMargin + iconMargin.bottomMargin;
 
 
-
-
         text = (TextView) getChildAt(1);
         text.setAlpha(0.0f);
         MarginLayoutParams textMargin = (MarginLayoutParams) text.getLayoutParams();
@@ -152,59 +127,48 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
         int textHeight = text.getMeasuredHeight() + textMargin.topMargin + textMargin.bottomMargin;
 
 
+        int lc = (width - iconWidth) / 2;
+        int tc = (width - iconWidth) / 2;
+        int rc = lc + iconWidth;
+        int bc = tc + iconHeight;
+
+        icon.layout(lc, tc, rc, bc);
 
 
-//        if(width == iconWidth)
-//        {
-//
-//        }
-//        else if(width>iconWidth)
-//        {
-
-            int lc = (width-iconWidth)/2;
-            int tc = (width-iconWidth)/2;
-            int rc = lc+iconWidth;
-            int bc = tc+iconHeight;
-
-            icon.layout(lc, tc, rc, bc);
-
-
-            int lc1 = (width-textWidth)/2;
-            int tc1 = bc;
-            int rc1 = lc1+textWidth;
-            int bc1 = tc1+textHeight;
+        int lc1 = (width - textWidth) / 2;
+        int tc1 = bc;
+        int rc1 = lc1 + textWidth;
+        int bc1 = tc1 + textHeight;
 
 
         /**
          * -tc字体全部显示
          */
 //            text.layout(lc1,tc1-tc,rc1,bc1-tc);
-            text.layout(lc1,tc1,rc1,bc1);
-
-
-
-//        }
+        text.layout(lc1, tc1, rc1, bc1);
     }
 
 
+    /**
+     * icon向上移动，text向上渐显动画
+     */
     public void startAnim()
     {
         MarginLayoutParams iconMargin = (MarginLayoutParams) icon.getLayoutParams();
         int iconWidth = icon.getMeasuredWidth() + iconMargin.leftMargin + iconMargin.rightMargin;
-        int tc = (getWidth()- iconWidth)/2;
+        int tc = (getWidth() - iconWidth) / 2;
 
-        Log.e(TAG,"startAnim tc-->"+tc);
         //icon Y轴向上移动tc
-        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",-tc).setDuration(500);
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon, "TranslationY", -tc).setDuration(500);
 
         //text透明度从0变到1
-        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),1.0f).setDuration(500);
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text, "Alpha", text.getAlpha(), 1.0f).setDuration(500);
         //text Y轴向上移动tc
-        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",-tc).setDuration(500);
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text, "TranslationY", -tc).setDuration(500);
 
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
+        animatorSet.playTogether(iconYAnim, textAlphaAnim, textYAnim);
         animatorSet.start();
 
         setTag(2);
@@ -212,35 +176,34 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
 
     }
 
+    /**
+     * 复原动画
+     */
     public void reverseAnim()
     {
         MarginLayoutParams iconMargin = (MarginLayoutParams) icon.getLayoutParams();
         int iconWidth = icon.getMeasuredWidth() + iconMargin.leftMargin + iconMargin.rightMargin;
-        int tc = (getWidth()- iconWidth)/2;
-
-        Log.e(TAG,"reverseAnim tc-->"+tc);
-
+        int tc = (getWidth() - iconWidth) / 2;
 
         /**
          *注意这里是0，因为是-tc+tc，所以是0
          */
         //icon Y轴向下移动0
-        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon,"TranslationY",0).setDuration(500);
+        ObjectAnimator iconYAnim = ObjectAnimator.ofFloat(icon, "TranslationY", 0).setDuration(500);
 
         //text透明度从1变到0
-        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text,"Alpha",text.getAlpha(),0.0f).setDuration(500);
+        ObjectAnimator textAlphaAnim = ObjectAnimator.ofFloat(text, "Alpha", text.getAlpha(), 0.0f).setDuration(500);
         //text Y轴向下移动0
-        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text,"TranslationY",0).setDuration(500);
+        ObjectAnimator textYAnim = ObjectAnimator.ofFloat(text, "TranslationY", 0).setDuration(500);
 
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(iconYAnim,textAlphaAnim,textYAnim);
+        animatorSet.playTogether(iconYAnim, textAlphaAnim, textYAnim);
         animatorSet.start();
 
         setTag(1);
 
     }
-
 
 
     /**
@@ -258,43 +221,35 @@ public class AnimItemV extends ViewGroup implements View.OnClickListener,View.On
     @Override
     public void onClick(View view)
     {
-        if((int)getTag() == 1)
+        if ((int) getTag() == 1)
         {
             startAnim();
         }
-        else if((int)getTag() == 2)
+        else if ((int) getTag() == 2)
         {
             reverseAnim();
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev)
+    {
+        Log.e(TAG, TAG + " dispatchTouchEvent");
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent)
+    public boolean onInterceptTouchEvent(MotionEvent ev)
     {
+        Log.e(TAG, TAG + " onInterceptTouchEvent");
+        return super.onInterceptTouchEvent(ev);
+    }
 
-        LinearLayout p = (LinearLayout)getParent();
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-        {
-            int radius = Math.max(p.getWidth(), p.getHeight());
-            x = (int)motionEvent.getRawX();
-            y = (int)motionEvent.getRawY();
-
-            setIX(x);
-            setIY(y);
-
-//                    activityColorfulBar.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
-//                    {
-//                        Animator anim = ViewAnimationUtils.createCircularReveal(activityColorfulBar,(int)motionEvent.getRawX(),(int)motionEvent.getRawY(),0,radius);
-//                        anim.setDuration(500);
-//                        anim.setInterpolator(new AccelerateInterpolator());
-//                        anim.setStartDelay(500);
-//                        anim.start();
-//                    }
-
-        }
-        return false;
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        Log.e(TAG, TAG + " onTouchEvent");
+        return super.onTouchEvent(event);
     }
 
 }

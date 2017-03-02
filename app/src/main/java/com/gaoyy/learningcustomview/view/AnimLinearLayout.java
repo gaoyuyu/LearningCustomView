@@ -1,5 +1,8 @@
 package com.gaoyy.learningcustomview.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,6 +10,9 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 
 /**
@@ -15,13 +21,12 @@ import android.widget.LinearLayout;
 
 public class AnimLinearLayout extends LinearLayout
 {
-    private static final String TAG=AnimLinearLayout.class.getSimpleName();
-    private int[] colors = {android.R.color.holo_blue_dark,android.R.color.holo_red_light,
-            android.R.color.holo_green_light,android.R.color.holo_orange_dark,android.R.color.holo_purple};
+    private static final String TAG = AnimLinearLayout.class.getSimpleName();
+    private int[] rippleColors;
     private int childX;
     private int childY;
     private float radius;
-    private int color;
+    private int rippleColor;
 
     public int getChildX()
     {
@@ -54,24 +59,34 @@ public class AnimLinearLayout extends LinearLayout
         this.radius = radius;
     }
 
-    public int getColor()
+    public int getRippleColor()
     {
-        return color;
+        return rippleColor;
     }
 
-    public void setColor(int color)
+    public void setRippleColor(int rippleColor)
     {
-        this.color = color;
+        this.rippleColor = rippleColor;
+    }
+
+    public int[] getRippleColors()
+    {
+        return rippleColors;
+    }
+
+    public void setRippleColors(int[] rippleColors)
+    {
+        this.rippleColors = rippleColors;
     }
 
     public AnimLinearLayout(Context context)
     {
-        this(context,null);
+        this(context, null);
     }
 
     public AnimLinearLayout(Context context, AttributeSet attrs)
     {
-        this(context, attrs,-1);
+        this(context, attrs, -1);
     }
 
     public AnimLinearLayout(Context context, AttributeSet attrs, int defStyleAttr)
@@ -98,80 +113,120 @@ public class AnimLinearLayout extends LinearLayout
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-        Log.e(TAG,"onDraw childX--->"+childX);
-        Log.e(TAG,"onDraw childY--->"+childY);
-        Log.e(TAG,"onDraw radius--->"+radius);
-        if(childX == 0|| childY == 0) return;
-        Paint mp  = new Paint();
-        mp.setColor(color);
-//        mp.setColor(Color.BLACK);
-        canvas.drawCircle(childX,childY,radius,mp);
+        if (childX == 0 || childY == 0) return;
+        Paint mp = new Paint();
+        mp.setColor(rippleColor);
+        canvas.drawCircle(childX, childY, radius, mp);
     }
 
 
-    /**
-     *
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event)
+    {
+        Log.e(TAG, TAG + " dispatchTouchEvent");
+        return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event)
+    {
+        Log.e(TAG, TAG + " onInterceptTouchEvent");
+        int action = event.getAction();
+        switch (action)
+        {
+            case MotionEvent.ACTION_DOWN:
+                int childCount = getChildCount();
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+
+                Log.e(TAG, "x-->" + x);
+                for (int i = 0; i < childCount; i++)
+                {
+                    AnimItemV animItemV = (AnimItemV) getChildAt(i);
+                    if(x>=animItemV.getTop()&&x<=animItemV.getRight())
+                    {
+                        setRippleColor(getResources().getColor(rippleColors[i]));
+                        break;
+                    }
+                }
+
+
+                setChildX(x);
+                setChildY(y);
+
+
+                break;
+
+            case MotionEvent.ACTION_UP:
+                int radius = Math.max(getWidth(), getHeight());
+                ValueAnimator animator = ValueAnimator.ofInt(0, radius);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+                {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator)
+                    {
+                        int currentRadius = (int) valueAnimator.getAnimatedValue();
+                        setRadius((float) (currentRadius));
+                        invalidate();
+                    }
+                });
+
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.start();
+
+                animator.addListener(new AnimatorListenerAdapter()
+                {
+                    @Override
+                    public void onAnimationEnd(Animator animation)
+                    {
+                        super.onAnimationEnd(animation);
+                        setBackgroundColor(rippleColor);
+                    }
+                });
+                break;
+
+        }
+
+
+        return super.onInterceptTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        Log.e(TAG, TAG + " onTouchEvent");
+        return super.onTouchEvent(event);
+    }
 
     @Override
     protected void onAttachedToWindow()
     {
         super.onAttachedToWindow();
 
+
         int childCount = getChildCount();
 
-        Log.e(TAG,"onAttachedToWindow childCount--->"+childCount);
-
-
-        for(int i=0;i<childCount;i++)
+        for (int i = 0; i < childCount; i++)
         {
-            AnimItemV animItemV = (AnimItemV)getChildAt(i);
-            if(animItemV.getTag() != null)
-            {
-                Log.e(TAG,"第"+i+"个"+"====tag--->"+(int)animItemV.getTag());
-            }
 
-            final int finalI = i;
+            final AnimItemV animItemV = (AnimItemV) getChildAt(i);
             animItemV.setOnTouchListener(new OnTouchListener()
             {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent)
                 {
-                    if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                    for (int i = 0; i < getChildCount(); i++)
                     {
-                        int radius = Math.max(getWidth(), getHeight());
-                        int x = (int) motionEvent.getRawX();
-                        int y = (int) motionEvent.getRawY();
-                        setChildX(x);
-                        setChildY(y);
-                        setColor(getResources().getColor(colors[finalI]));
-
-
-                        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, (float) radius);
-                        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
+                        if (animItemV.getId() == getChildAt(i).getId())
                         {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator)
-                            {
-                                float currentRadius = (float) valueAnimator.getAnimatedValue();
-
-                                setRadius(currentRadius);
-
-                                invalidate();
-
-                            }
-                        });
-                        valueAnimator.setDuration(500);
-                        valueAnimator.setInterpolator(new DecelerateInterpolator());
-                        valueAnimator.start();
-
+                            continue;
+                        }
+                        ((AnimItemV) getChildAt(i)).reverseAnim();
                     }
                     return false;
                 }
             });
         }
 
-
-
     }
-     */
 }
