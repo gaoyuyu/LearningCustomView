@@ -92,14 +92,12 @@ public class AnimLinearLayout extends LinearLayout
     public AnimLinearLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        setWillNotDraw(false);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public AnimLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)
     {
         super(context, attrs, defStyleAttr, defStyleRes);
-        setWillNotDraw(false);
     }
 
 
