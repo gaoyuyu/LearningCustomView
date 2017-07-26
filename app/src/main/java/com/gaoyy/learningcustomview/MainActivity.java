@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.wave:
                 intent.setClass(MainActivity.this, WaveActivity.class);
+                break;
             case R.id.viewgroup:
                 intent.setClass(MainActivity.this, FlowActivity.class);
                 break;
