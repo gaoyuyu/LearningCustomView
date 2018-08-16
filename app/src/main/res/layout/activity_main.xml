@@ -32,13 +32,22 @@
 
     <Button
         android:id="@+id/viewgroup"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="自定义viewgroup  FlowLayout"/>
 
     <Button
+        android:textAllCaps="false"
         android:id="@+id/colorfulbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Colorful Bar"/>
+
+    <Button
+        android:id="@+id/coupon"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="coupon view"/>
 </LinearLayout>

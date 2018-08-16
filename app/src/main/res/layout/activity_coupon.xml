@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:couponView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".ui.CouponActivity">
+
+
+    <com.gaoyy.learningcustomview.view.CouponView
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        couponView:bgColor="#FFD02E"
+        couponView:cornerCircleRadius="10dp"
+        couponView:leftBottom="true"
+        couponView:leftTop="false"
+        couponView:lineColor="#949494"
+        couponView:lineWidth="1dp"
+        couponView:midDashLinePosition="bottom"
+        couponView:midDashLineWidth="1dp"
+        couponView:mode="active"
+        couponView:rectCornerRadius="2dp"
+        couponView:rightBottom="true"
+        couponView:rightTop="false"
+        />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="set mode"/>
+
+</android.support.v7.widget.LinearLayoutCompat>

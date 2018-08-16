@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.ColorfulBarActivity">
         </activity>
+        <activity android:name=".ui.CouponActivity">
+        </activity>
     </application>
 
 </manifest>

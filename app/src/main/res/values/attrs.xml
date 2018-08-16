@@ -7,7 +7,6 @@
     </declare-styleable>
 
 
-
     <declare-styleable name="WaveView">
         <!-- 遮罩类型 圆形 矩形 圆角矩形 自定义图片-->
         <attr name="maskType">
@@ -28,6 +27,38 @@
     <declare-styleable name="AnimItem">
         <attr name="icon" format="reference"></attr>
         <attr name="bottomText" format="string"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="CouponView">
+        <attr name="mode">
+            <!-- 激活状态 -->
+            <enum name="active" value="1"/>
+            <!-- 未激活状态 -->
+            <enum name="inactive" value="2"/>
+        </attr>
+        <!-- 圆角位置 -->
+        <attr name="leftTop" format="boolean"/>
+        <attr name="leftBottom" format="boolean"/>
+        <attr name="rightTop" format="boolean"/>
+        <attr name="rightBottom" format="boolean"/>
+        <!-- 背景颜色 -->
+        <attr name="bgColor" format="color"/>
+        <!-- 线条颜色 -->
+        <attr name="lineColor" format="color"/>
+        <!-- 线条宽度 -->
+        <attr name="lineWidth" format="dimension"/>
+        <!-- 4个位置的圆角半径 -->
+        <attr name="cornerCircleRadius" format="dimension"/>
+        <!-- 矩形圆角半径-->
+        <attr name="rectCornerRadius" format="dimension"/>
+        <!-- 中间虚线位置 -->
+        <attr name="midDashLinePosition">
+            <enum name="top" value="1"/>
+            <enum name="bottom" value="2"/>
+        </attr>
+        <!-- 中间虚线宽度 -->
+        <attr name="midDashLineWidth" format="dimension"/>
     </declare-styleable>
 
 </resources>
