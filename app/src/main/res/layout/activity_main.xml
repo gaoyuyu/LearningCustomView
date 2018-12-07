@@ -56,4 +56,10 @@
         android:layout_height="wrap_content"
         android:text="雷达图"
         android:textAllCaps="false" />
+    <Button
+        android:id="@+id/love_wave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="心形水波纹"
+        android:textAllCaps="false" />
 </LinearLayout>

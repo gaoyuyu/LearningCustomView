@@ -15,13 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.CustomTitleViewActivity"></activity>
-        <activity android:name=".ui.CircleStatisticalActivity"></activity>
-        <activity android:name=".ui.WaveActivity"></activity>
-        <activity android:name=".ui.FlowActivity"></activity>
-        <activity android:name=".ui.ColorfulBarActivity"></activity>
-        <activity android:name=".ui.CouponActivity"></activity>
-        <activity android:name=".ui.RadarActivity"></activity>
+        <activity android:name=".ui.CustomTitleViewActivity" />
+        <activity android:name=".ui.CircleStatisticalActivity" />
+        <activity android:name=".ui.WaveActivity" />
+        <activity android:name=".ui.FlowActivity" />
+        <activity android:name=".ui.ColorfulBarActivity" />
+        <activity android:name=".ui.CouponActivity" />
+        <activity android:name=".ui.RadarActivity" />
+        <activity android:name=".ui.LoveWaveActivity"></activity>
     </application>
 
 </manifest>
