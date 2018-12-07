@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:RadarScoreView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#231959"
+    android:orientation="vertical"
+    tools:context=".ui.RadarActivity">
+
+    <com.gaoyy.learningcustomview.view.RadarScoreView
+        android:id="@+id/radar"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        RadarScoreView:rsv_animDuration="800"
+        RadarScoreView:rsv_dataCount="5"
+        RadarScoreView:rsv_lineColor="#ffffff"
+        RadarScoreView:rsv_lineType="STROKE"
+        RadarScoreView:rsv_lineWidth="0.5dp"
+        RadarScoreView:rsv_maxValue="10"
+        RadarScoreView:rsv_radarCoverColor="#4effffff"
+        RadarScoreView:rsv_radarNumberTextColor="#ffffff"
+        RadarScoreView:rsv_radarNumberTextSize="18sp"
+        RadarScoreView:rsv_radarTextColor="#80ffffff"
+        RadarScoreView:rsv_radarTextSize="20sp" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开启动画" />
+
+</android.support.v7.widget.LinearLayoutCompat>

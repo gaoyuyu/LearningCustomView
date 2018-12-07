@@ -11,53 +11,52 @@ import com.gaoyy.learningcustomview.ui.ColorfulBarActivity;
 import com.gaoyy.learningcustomview.ui.CouponActivity;
 import com.gaoyy.learningcustomview.ui.CustomTitleViewActivity;
 import com.gaoyy.learningcustomview.ui.FlowActivity;
+import com.gaoyy.learningcustomview.ui.RadarActivity;
 import com.gaoyy.learningcustomview.ui.WaveActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button ctv;
     private Button csv;
     private Button wave;
     private Button viewgroup;
     private Button colorfulbar;
     private Button coupon;
+    private Button radar;
 
-    private void assignViews()
-    {
+    private void assignViews() {
         ctv = (Button) findViewById(R.id.ctv);
         csv = (Button) findViewById(R.id.csv);
         wave = (Button) findViewById(R.id.wave);
         viewgroup = (Button) findViewById(R.id.viewgroup);
         colorfulbar = (Button) findViewById(R.id.colorfulbar);
         coupon = (Button) findViewById(R.id.coupon);
+        radar = (Button) findViewById(R.id.radar);
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         assignViews();
         setListener();
     }
 
-    private void setListener()
-    {
+    private void setListener() {
         ctv.setOnClickListener(this);
         csv.setOnClickListener(this);
         wave.setOnClickListener(this);
         viewgroup.setOnClickListener(this);
         colorfulbar.setOnClickListener(this);
         coupon.setOnClickListener(this);
+        radar.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view)
-    {
+    public void onClick(View view) {
         int id = view.getId();
         Intent intent = new Intent();
-        switch (id)
-        {
+        switch (id) {
             case R.id.ctv:
                 intent.setClass(MainActivity.this, CustomTitleViewActivity.class);
                 break;
@@ -75,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.coupon:
                 intent.setClass(MainActivity.this, CouponActivity.class);
+                break;
+            case R.id.radar:
+                intent.setClass(MainActivity.this, RadarActivity.class);
                 break;
         }
         startActivity(intent);
