@@ -62,4 +62,10 @@
         android:layout_height="wrap_content"
         android:text="心形水波纹"
         android:textAllCaps="false" />
+    <Button
+        android:id="@+id/fade_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="心形电波"
+        android:textAllCaps="false" />
 </LinearLayout>

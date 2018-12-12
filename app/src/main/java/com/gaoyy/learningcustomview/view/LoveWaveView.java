@@ -1,4 +1,4 @@
-package com.gaoyy.learningcustomview.ui;
+package com.gaoyy.learningcustomview.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

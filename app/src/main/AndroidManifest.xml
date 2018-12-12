@@ -22,7 +22,8 @@
         <activity android:name=".ui.ColorfulBarActivity" />
         <activity android:name=".ui.CouponActivity" />
         <activity android:name=".ui.RadarActivity" />
-        <activity android:name=".ui.LoveWaveActivity"></activity>
+        <activity android:name=".ui.LoveWaveActivity" />
+        <activity android:name=".ui.FadeImageActivity"></activity>
     </application>
 
 </manifest>

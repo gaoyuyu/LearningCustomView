@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.gaoyy.learningcustomview.R;
+import com.gaoyy.learningcustomview.view.LoveWaveView;
 
 public class LoveWaveActivity extends AppCompatActivity {
 

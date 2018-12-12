@@ -10,6 +10,7 @@ import com.gaoyy.learningcustomview.ui.CircleStatisticalActivity;
 import com.gaoyy.learningcustomview.ui.ColorfulBarActivity;
 import com.gaoyy.learningcustomview.ui.CouponActivity;
 import com.gaoyy.learningcustomview.ui.CustomTitleViewActivity;
+import com.gaoyy.learningcustomview.ui.FadeImageActivity;
 import com.gaoyy.learningcustomview.ui.FlowActivity;
 import com.gaoyy.learningcustomview.ui.LoveWaveActivity;
 import com.gaoyy.learningcustomview.ui.RadarActivity;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button coupon;
     private Button radar;
     private Button loveWave;
+    private Button fadeImg;
 
     private void assignViews() {
         ctv = (Button) findViewById(R.id.ctv);
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         coupon = (Button) findViewById(R.id.coupon);
         radar = (Button) findViewById(R.id.radar);
         loveWave = (Button) findViewById(R.id.love_wave);
+        fadeImg = (Button) findViewById(R.id.fade_img);
     }
 
 
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         coupon.setOnClickListener(this);
         radar.setOnClickListener(this);
         loveWave.setOnClickListener(this);
+        fadeImg.setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.love_wave:
                 intent.setClass(MainActivity.this, LoveWaveActivity.class);
+                break;
+            case R.id.fade_img:
+                intent.setClass(MainActivity.this, FadeImageActivity.class);
                 break;
         }
         startActivity(intent);

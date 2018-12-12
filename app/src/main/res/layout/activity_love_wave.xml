@@ -8,7 +8,7 @@
     android:padding="10dp"
     tools:context=".MainActivity">
 
-    <com.gaoyy.learningcustomview.ui.LoveWaveView
+    <com.gaoyy.learningcustomview.view.LoveWaveView
         android:id="@+id/love_wave_view"
         android:layout_width="130dp"
         android:layout_height="83dp"

@@ -122,4 +122,13 @@
         <attr name="lwv_centerTextColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="FadeImageView">
+        <!-- 背景图片资源 -->
+        <attr name="fiv_backgroundImageRes" format="reference" />
+        <!-- 前景图片资源 -->
+        <attr name="fiv_frontImageRes" format="reference" />
+        <!-- 动画时间 -->
+        <attr name="fiv_animDuration" format="integer" />
+    </declare-styleable>
+
 </resources>
