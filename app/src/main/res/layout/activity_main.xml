@@ -1,71 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.NestedScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.gaoyy.learningcustomview.MainActivity">
-
-    <Button
-        android:id="@+id/ctv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="customtitleview" />
-
-    <Button
-        android:id="@+id/csv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="圆形统计图" />
-
-    <Button
-        android:id="@+id/wave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="水波纹" />
 
 
-    <Button
-        android:id="@+id/viewgroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="自定义viewgroup  FlowLayout"
-        android:textAllCaps="false" />
+    >
 
-    <Button
-        android:id="@+id/colorfulbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Colorful Bar"
-        android:textAllCaps="false" />
 
-    <Button
-        android:id="@+id/coupon"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="coupon view"
-        android:textAllCaps="false" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="com.gaoyy.learningcustomview.MainActivity">
 
-    <Button
-        android:id="@+id/radar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="雷达图"
-        android:textAllCaps="false" />
-    <Button
-        android:id="@+id/love_wave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="心形水波纹"
-        android:textAllCaps="false" />
-    <Button
-        android:id="@+id/fade_img"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="心形电波"
-        android:textAllCaps="false" />
-</LinearLayout>
+        <Button
+            android:id="@+id/ctv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="customtitleview" />
+
+        <Button
+            android:id="@+id/csv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="圆形统计图" />
+
+        <Button
+            android:id="@+id/wave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="水波纹" />
+
+
+        <Button
+            android:id="@+id/viewgroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自定义viewgroup  FlowLayout"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/colorfulbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Colorful Bar"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/coupon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="coupon view"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/radar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="雷达图"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/love_wave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="心形水波纹"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/fade_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="心形电波"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/magic_ball"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="魔法球"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/mask_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="遮罩tv"
+            android:textAllCaps="false" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

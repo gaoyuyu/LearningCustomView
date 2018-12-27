@@ -96,7 +96,6 @@
     </declare-styleable>
 
 
-
     <declare-styleable name="LoveWaveView">
         <!-- 速度 -->
         <attr name="lwv_speed" format="float" />
@@ -130,5 +129,15 @@
         <!-- 动画时间 -->
         <attr name="fiv_animDuration" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="MaskTextView">
+        <!-- 遮罩图片资源 -->
+        <attr name="mtv_maskImageRes" format="reference" />
+        <!--  字体大小-->
+        <attr name="mtv_textSize" format="dimension" />
+        <!--  字体大小-->
+        <attr name="mtv_text" format="string" />
+    </declare-styleable>
+
 
 </resources>

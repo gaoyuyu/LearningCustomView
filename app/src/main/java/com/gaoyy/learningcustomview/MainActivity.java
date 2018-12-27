@@ -13,6 +13,8 @@ import com.gaoyy.learningcustomview.ui.CustomTitleViewActivity;
 import com.gaoyy.learningcustomview.ui.FadeImageActivity;
 import com.gaoyy.learningcustomview.ui.FlowActivity;
 import com.gaoyy.learningcustomview.ui.LoveWaveActivity;
+import com.gaoyy.learningcustomview.ui.MagicBallActivity;
+import com.gaoyy.learningcustomview.ui.MaskTextViewActivity;
 import com.gaoyy.learningcustomview.ui.RadarActivity;
 import com.gaoyy.learningcustomview.ui.WaveActivity;
 
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button radar;
     private Button loveWave;
     private Button fadeImg;
+    private Button magicBall;
+    private Button maskTv;
 
     private void assignViews() {
         ctv = (Button) findViewById(R.id.ctv);
@@ -37,8 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radar = (Button) findViewById(R.id.radar);
         loveWave = (Button) findViewById(R.id.love_wave);
         fadeImg = (Button) findViewById(R.id.fade_img);
+        magicBall = (Button) findViewById(R.id.magic_ball);
+        maskTv = (Button) findViewById(R.id.mask_tv);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radar.setOnClickListener(this);
         loveWave.setOnClickListener(this);
         fadeImg.setOnClickListener(this);
+        magicBall.setOnClickListener(this);
+        maskTv.setOnClickListener(this);
     }
 
     @Override
@@ -91,6 +98,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fade_img:
                 intent.setClass(MainActivity.this, FadeImageActivity.class);
+                break;
+            case R.id.magic_ball:
+                intent.setClass(MainActivity.this, MagicBallActivity.class);
+                break;
+            case R.id.mask_tv:
+                intent.setClass(MainActivity.this, MaskTextViewActivity.class);
                 break;
         }
         startActivity(intent);

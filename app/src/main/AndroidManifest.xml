@@ -23,7 +23,9 @@
         <activity android:name=".ui.CouponActivity" />
         <activity android:name=".ui.RadarActivity" />
         <activity android:name=".ui.LoveWaveActivity" />
-        <activity android:name=".ui.FadeImageActivity"></activity>
+        <activity android:name=".ui.FadeImageActivity" />
+        <activity android:name=".ui.MagicBallActivity" />
+        <activity android:name=".ui.MaskTextViewActivity"></activity>
     </application>
 
 </manifest>
