@@ -1,4 +1,4 @@
-package com.module.horoscope.widget;
+package com.gaoyy.learningcustomview.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
