@@ -20,9 +20,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.gaoyy.learningcustomview.R;
@@ -34,6 +34,18 @@ import java.util.Random;
 
 public class MagicBallView extends View {
 
+    public interface OnAnimListener {
+        void onStart();
+
+        void onStop();
+    }
+
+    private OnAnimListener onAnimListener = null;
+
+    public void setOnAnimListener(OnAnimListener onAnimListener) {
+        this.onAnimListener = onAnimListener;
+    }
+
     private final static String TAG = MagicBallView.class.getSimpleName();
 
     private int mWidth;
@@ -41,7 +53,7 @@ public class MagicBallView extends View {
 
     private PorterDuffXfermode mPorterDuffXfermode = null;
     //路径的数量
-    private int mPathCount = 9;
+    private int mPathCount = 10;
     //最外圈圆的画笔
     private Paint mCirclePaint;
     //最外圈圆的路径上的所有的点坐标
@@ -57,6 +69,7 @@ public class MagicBallView extends View {
     //路径上的数字文本的颜色
     private int[] mTextColorData = {
             Color.parseColor("#FFD500F9"),
+            Color.parseColor("#FFD500F9"),
             Color.parseColor("#FF0FF73E"),
             Color.parseColor("#FFED2706"),
             Color.parseColor("#FF008577"),
@@ -69,6 +82,7 @@ public class MagicBallView extends View {
 
     //路径上的数字文本的图片
     private int[] mTextImgData = {
+            R.mipmap.zero,
             R.mipmap.one,
             R.mipmap.two,
             R.mipmap.three,
@@ -77,7 +91,7 @@ public class MagicBallView extends View {
             R.mipmap.six,
             R.mipmap.seven,
             R.mipmap.eight,
-            R.mipmap.night,
+            R.mipmap.nine,
     };
 
     //数字图片bitmap集合
@@ -89,19 +103,21 @@ public class MagicBallView extends View {
 
     //路径上的数字文本的图片的缩放范围数据
     private TextImgScaleRange[] mTextImgScaleRangeData = {
-            new TextImgScaleRange(0.7f, 1f),
-            new TextImgScaleRange(0.6f, 1f),
-            new TextImgScaleRange(0.5f, 1f),
-            new TextImgScaleRange(0.4f, 1f),
-            new TextImgScaleRange(0.85f, 1f),
-            new TextImgScaleRange(0.65f, 1f),
-            new TextImgScaleRange(0.55f, 1f),
-            new TextImgScaleRange(0.45f, 1f),
-            new TextImgScaleRange(0.85f, 1f),
+            new TextImgScaleRange(1.8f, 2f),
+            new TextImgScaleRange(1.7f, 2f),
+            new TextImgScaleRange(1.6f, 2f),
+            new TextImgScaleRange(1.75f, 2f),
+            new TextImgScaleRange(1.75f, 2f),
+            new TextImgScaleRange(1.85f, 2f),
+            new TextImgScaleRange(1.9f, 2f),
+            new TextImgScaleRange(1.77f, 2f),
+            new TextImgScaleRange(1.86f, 2f),
+            new TextImgScaleRange(1.85f, 2f),
     };
 
     //路径上的数字文本的透明度范围的集合
     private AlphaRange[] mTextAlphaRangeData = {
+            new AlphaRange(245, 255),
             new AlphaRange(203, 255),
             new AlphaRange(230, 255),
             new AlphaRange(220, 255),
@@ -115,6 +131,7 @@ public class MagicBallView extends View {
     //路径上的数字文本的大小变化范围的集合
     private TextSizeRange[] mTextSizeRangeData = {
             new TextSizeRange(100, 220),
+            new TextSizeRange(100, 220),
             new TextSizeRange(190, 100),
             new TextSizeRange(90, 150),
             new TextSizeRange(80, 75),
@@ -127,29 +144,31 @@ public class MagicBallView extends View {
 
     //路径上的数字文本的大小变化范围的集合
     private TextImgDegreeRange[] mTextImgDegreeRangeData = {
-            new TextImgDegreeRange(-100, 220),
-            new TextImgDegreeRange(-190, 100),
-            new TextImgDegreeRange(-90, 150),
-            new TextImgDegreeRange(-80, 75),
-            new TextImgDegreeRange(-180, 125),
-            new TextImgDegreeRange(-150, 88),
-            new TextImgDegreeRange(-60, 90),
-            new TextImgDegreeRange(-220, 90),
-            new TextImgDegreeRange(-79, 120),
+            new TextImgDegreeRange(-50, 10),
+            new TextImgDegreeRange(-40, 30),
+            new TextImgDegreeRange(-45, 55),
+            new TextImgDegreeRange(-60, 60),
+            new TextImgDegreeRange(-30, 10),
+            new TextImgDegreeRange(-20, 30),
+            new TextImgDegreeRange(-5, 10),
+            new TextImgDegreeRange(-10, 9),
+            new TextImgDegreeRange(-20, 10),
+            new TextImgDegreeRange(-30, 70),
     };
 
 
     //路径上的数字文本属性变化时间的集合
     private TextAnimDuration[] mTextAnimDurationData = {
-            new TextAnimDuration(8500, 8500, 3000),
-            new TextAnimDuration(9500, 9500, 4000),
-            new TextAnimDuration(9500, 9500, 5000),
-            new TextAnimDuration(17500, 17500, 6000),
-            new TextAnimDuration(14400, 14400, 3500),
-            new TextAnimDuration(18000, 18000, 6500),
-            new TextAnimDuration(10000, 10000, 7500),
-            new TextAnimDuration(18000, 18000, 6300),
-            new TextAnimDuration(18000, 18000, 4400),
+            new TextAnimDuration(6500, 8500, 3000),
+            new TextAnimDuration(6500, 8500, 3000),
+            new TextAnimDuration(7500, 9500, 4000),
+            new TextAnimDuration(7500, 9500, 5000),
+            new TextAnimDuration(13000, 17500, 6000),
+            new TextAnimDuration(8900, 14400, 3500),
+            new TextAnimDuration(8888, 18000, 6500),
+            new TextAnimDuration(5555, 10000, 7500),
+            new TextAnimDuration(7777, 18000, 6300),
+            new TextAnimDuration(10000, 18000, 4400),
     };
     //路径上的数字图片的当前缩放值
     private List<Float> mTextImgScaleList = new ArrayList<>();
@@ -178,6 +197,10 @@ public class MagicBallView extends View {
     //背景色块的动画集合
     private List<Animator> mColorCircleAnimSetList = new ArrayList<>();
     private AnimatorSet mColorCircleAnimatorSet = null;
+
+    //所有动画的集合（路径+背景色块）
+    private AnimatorSet mAllAnimSet = null;
+
 
     //遮罩层bitmap
     private Bitmap mMaskBitmap = null;
@@ -243,7 +266,15 @@ public class MagicBallView extends View {
         if (mTextBitmapList.size() == 0) {
             for (int i = 0; i < mPathCount; i++) {
                 Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(mTextImgData[i])).getBitmap();
-                mTextBitmapList.add(bitmap);
+                float bitmapScaleWidth = bitmap.getWidth() * 1.3f;
+                float bitmapScaleHeight = bitmap.getHeight() * 1.3f;
+                bitmap = Bitmap.createScaledBitmap(bitmap, (int) bitmapScaleWidth, (int) bitmapScaleHeight, false);
+                Matrix m = new Matrix();
+                //随机角度变,-40,40
+                int randomDegrees = new Random().nextInt(40);
+                m.postRotate(i % 2 == 0 ? 0 - randomDegrees : randomDegrees);
+                Bitmap new2 = Bitmap.createBitmap(bitmap, 0, 0, (int) bitmapScaleWidth, (int) bitmapScaleHeight, m, true);
+                mTextBitmapList.add(new2);
             }
         }
 
@@ -353,7 +384,6 @@ public class MagicBallView extends View {
 
         if (mColorCircleAnimSetList.size() == 0) {
             for (int i = 0; i < mColorCircleCount; i++) {
-                AnimatorSet animatorSet = new AnimatorSet();
                 final PathMeasure pathMeasure = mColorCirclePathMeasureList.get(i);
                 ValueAnimator circleAnimator = ValueAnimator.ofFloat(1, pathMeasure.getLength());
                 final int finalI = i;
@@ -374,10 +404,10 @@ public class MagicBallView extends View {
 
                 circleAnimator.setRepeatCount(ValueAnimator.INFINITE);
                 circleAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                circleAnimator.setDuration(3000);
+                circleAnimator.setDuration(5500);
+                circleAnimator.setInterpolator(new FastOutLinearInInterpolator());
 
-                animatorSet.play(circleAnimator);
-                mColorCircleAnimSetList.add(animatorSet);
+                mColorCircleAnimSetList.add(circleAnimator);
             }
         }
     }
@@ -408,13 +438,15 @@ public class MagicBallView extends View {
         for (int i = 0; i < mPathCount; i++) {
 //            canvas.drawText(i + 1 + "", mPathPointList.get(i).getX(), mPathPointList.get(i).getY(), mTextPaintList.get(i));
             Bitmap bitmap = mTextBitmapList.get(i);
-            float bitmapScaleWidth = bitmap.getWidth() * mTextImgScaleList.get(i);
-            float bitmapScaleHeight = bitmap.getWidth() * mTextImgScaleList.get(i);
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int) bitmapScaleWidth, (int) bitmapScaleHeight, false);
-            Matrix m = new Matrix();
-            m.postRotate(mTextImgDegreeList.get(i));
-            Bitmap new2 = Bitmap.createBitmap(bitmap, 0, 0, (int) bitmapScaleWidth, (int) bitmapScaleHeight, m, true);
-            canvas.drawBitmap(new2, mPathPointList.get(i).getX() - bitmapScaleWidth, mPathPointList.get(i).getY() - bitmapScaleHeight, mTextPaintList.get(i));
+
+//            float bitmapScaleWidth = bitmap.getWidth() * mTextImgScaleList.get(i);
+//            float bitmapScaleHeight = bitmap.getHeight() * mTextImgScaleList.get(i);
+//            bitmap = Bitmap.createScaledBitmap(bitmap, (int) bitmapScaleWidth, (int) bitmapScaleHeight, false);
+//            Matrix m = new Matrix();
+//            m.postRotate(mTextImgDegreeList.get(i));
+//            Bitmap new2 = Bitmap.createBitmap(bitmap, 0, 0, (int) bitmapScaleWidth, (int) bitmapScaleHeight, m, true);
+//            canvas.drawBitmap(bitmap, mPathPointList.get(i).getX() - bitmapScaleWidth, mPathPointList.get(i).getY() - bitmapScaleHeight, mTextPaintList.get(i));
+            canvas.drawBitmap(bitmap, mPathPointList.get(i).getX() - bitmap.getWidth(), mPathPointList.get(i).getY() - bitmap.getHeight(), mTextPaintList.get(i));
 
         }
 
@@ -567,7 +599,6 @@ public class MagicBallView extends View {
         for (int i = 0; i < mCirclePathPointList.size(); i++) {
             PathPoint pathPoint = mCirclePathPointList.get(i);
             if (((int) pathPoint.getX()) == x) {
-                Log.d(TAG, "-->" + pathPoint.getY());
                 tmpY.add(pathPoint.getY());
             }
         }
@@ -624,26 +655,72 @@ public class MagicBallView extends View {
                     invalidate();
                 }
             });
+            textStartAlphaAnimator.setStartDelay(new Random().nextInt(1000));
             textStartAlphaAnimator.setDuration(1000);
             textStartAlphaAnimator.setInterpolator(new FastOutSlowInInterpolator());
             valueAnimatorList.add(textStartAlphaAnimator);
         }
         animatorSet.playTogether(valueAnimatorList);
-        animatorSet.start();
 
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                //动画开始回调
+                if (onAnimListener != null) {
+                    onAnimListener.onStart();
+                }
+            }
+
+            @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                startPathAnim();
-                startColorCircleAnim();
+                //开启路径动画和背景色块动画
+                startAllAnim();
             }
         });
+        animatorSet.start();
+    }
+
+    /**
+     * 开启路径动画和背景色块动画
+     */
+    private void startAllAnim() {
+        if (mColorCircleAnimSetList.size() != 0) {
+            if (mColorCircleAnimatorSet == null) {
+                mColorCircleAnimatorSet = new AnimatorSet();
+                mColorCircleAnimatorSet.playTogether(mColorCircleAnimSetList);
+                mColorCircleAnimatorSet.start();
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    //若背景色块动画是暂停状态的，恢复启动
+                    if (mColorCircleAnimatorSet.isPaused()) mColorCircleAnimatorSet.resume();
+                } else {
+                    //API向下兼容的时候，直接start吧
+                    mColorCircleAnimatorSet.start();
+                }
+            }
+        }
+
+        if (mTextAnimSetList.size() != 0) {
+            mTextAnimatorSet = new AnimatorSet();
+            mTextAnimatorSet.playTogether(mTextAnimSetList);
+            mTextAnimatorSet.start();
+        }
     }
 
     public void stopAnim() {
-        stopPathAnim();
-        stopColorCircleAnim();
+        if (mColorCircleAnimatorSet.isRunning()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                //暂停背景色块的动画
+                mColorCircleAnimatorSet.pause();
+            } else {
+                //API向下兼容的时候，直接cancel吧
+                mColorCircleAnimatorSet.cancel();
+            }
+        }
+
+        mTextAnimatorSet.cancel();
 
         AnimatorSet animatorSet = new AnimatorSet();
         List<Animator> valueAnimatorList = new ArrayList<>();
@@ -667,55 +744,39 @@ public class MagicBallView extends View {
             valueAnimatorList.add(textStartAlphaAnimator);
         }
         animatorSet.playTogether(valueAnimatorList);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                //重置路径
+                resetPath();
+                if (onAnimListener != null) {
+                    onAnimListener.onStop();
+                }
+            }
+        });
         animatorSet.start();
-
-
-    }
-
-
-    /**
-     * 开启路径上的数字文本各种属性动画
-     */
-    private void startPathAnim() {
-        if (mTextAnimSetList.size() != 0) {
-            mTextAnimatorSet = new AnimatorSet();
-            mTextAnimatorSet.playTogether(mTextAnimSetList);
-            mTextAnimatorSet.start();
-        }
     }
 
     /**
-     * 开启背景圆形色块动画
+     * 重置路径
      */
-    private void startColorCircleAnim() {
-        if (mColorCircleAnimSetList.size() != 0) {
-            mColorCircleAnimatorSet = new AnimatorSet();
-            mColorCircleAnimatorSet.playTogether(mColorCircleAnimSetList);
-            mColorCircleAnimatorSet.start();
+    private void resetPath() {
+        mTextImgDegreeList.clear();
+        for (int i = 0; i < mPathCount; i++) {
+            final PathMeasure pathMeasure = mPathMeasureList.get(i);
+            float[] pos = new float[2];
+            float[] tan = new float[2];
+            pathMeasure.getPosTan(0, pos, tan);
+            mPathPointList.remove(i);
+            mPathPointList.add(i, new PathPoint(pos[0], pos[1]));
+            mTextImgDegreeList.add(mTextImgDegreeRangeData[i].getStartDegree());
+            pos = null;
+            tan = null;
+            invalidate();
         }
     }
 
-    /**
-     * 关闭路径上的数字文本各种属性动画
-     */
-    private void stopPathAnim() {
-        if (mTextAnimSetList.size() != 0) {
-            if (mTextAnimatorSet != null) {
-                mTextAnimatorSet.cancel();
-            }
-        }
-    }
-
-    /**
-     * 关闭背景圆形色块动画
-     */
-    private void stopColorCircleAnim() {
-        if (mColorCircleAnimSetList.size() != 0) {
-            if (mColorCircleAnimatorSet != null) {
-                mColorCircleAnimatorSet.cancel();
-            }
-        }
-    }
 }
 
 
